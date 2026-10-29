@@ -1,3 +1,4 @@
 id,date,symbol,strategy,notional,qty,entry,stop,target,exit,exit_reason,pnl_usd,pnl_pct,r_multiple,entry_time,exit_time,setup_detail
 397dfa72-a2cb-4fb3-a7e8-0675df35bc79,2026-10-29,T,orb,2000.0,93.896244131,21.3,21.09,21.72,21.09,stop,-19.7182,-0.986,-1.0,10:13:55,11:26:57,"OR 21.04-21.25, closed 21.35 at 10:10 AM (+0.47% over)"
 a434c08b-e665-4cd9-8a12-bb44bf27c49c,2026-10-29,VRT,orb,2000.0,8.182260769,244.43,240.02,253.25,253.38,target,73.2312,3.662,2.03,10:14:14,11:54:50,"OR 236.62-243.12, closed 244.28 at 10:00 AM (+0.48% over)"
+4609e4cf-6a62-40a4-bed9-6f9bb0cedd2e,2026-10-29,AMAT,orb,2000.0,4.809633744,415.83,411.48,424.53,424.2179,target,40.3428,2.017,1.93,10:14:00,11:55:53,"OR 410.57-415.45, closed 417.36 at 10:05 AM (+0.46% over)"

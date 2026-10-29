@@ -16,20 +16,6 @@
     },
     {
       "date": "2026-10-29",
-      "entry": 415.83,
-      "entry_time": "10:14:00",
-      "id": "4609e4cf-6a62-40a4-bed9-6f9bb0cedd2e",
-      "notional": 2000.0,
-      "qty": 4.809633744,
-      "setup_detail": "OR 410.57-415.45, closed 417.36 at 10:05 AM (+0.46% over)",
-      "stop": 411.48,
-      "stop_order": "9e72bcd7-88f9-44b6-b2b8-7225176ac0d8",
-      "strategy": "orb",
-      "symbol": "AMAT",
-      "target": 424.53
-    },
-    {
-      "date": "2026-10-29",
       "entry": 151.18,
       "entry_time": "10:14:02",
       "id": "f4ba70a1-cc9b-4dc1-a0a1-89944d702036",
