@@ -3,9 +3,15 @@
 
     python3 paper.py universe                 # most-active US stocks -> journal/state/universe.json
     python3 paper.py daily                    # daily setups on complete daily bars -> journal/state/watchlist.json
-    python3 paper.py run --until 15:56        # trade the day: orb + daily entries, stops, targets, flat by 3:55 PM
+    python3 paper.py run --until 11:35        # the entries: orb 9:50-11:30, daily setups at 10:00 AM
+    python3 paper.py run --until 15:58        # from 3:50 PM: watch, then flat by 3:55 PM (12:55 on half days)
     python3 paper.py flatten                  # cancel every open order, close every position, log the exits
     python3 paper.py report                   # journal/tally.md from journal/trades.csv
+
+Entries of at least one whole share go in as one bracket order, so the stop and the target
+both sit on Alpaca's server and nothing has to run between the entries and the close.
+Under one share it buys by notional and places a separate stop; the run loop watches the target.
+Each strategy holds at most SLOTS[strategy] positions at once.
 
 Market data comes from Alpaca (data.alpaca.markets): SIP for complete daily bars,
 IEX for today's 5-minute bars and the latest trade. The setups are the scanner's
@@ -14,7 +20,9 @@ own functions (find_setups, session_bars, orb_hit) and the exit planner's ATR.
 Hard rules, enforced by check_order before every request that could trade:
   * only https://paper-api.alpaca.markets, never the live host
   * buys: market, day, a notional between MIN_NOTIONAL and MAX_NOTIONAL dollars,
-    a tradable, fractionable us_equity; never qty, never options, never crypto
+    a tradable, fractionable us_equity; never options, never crypto
+  * whole shares instead: a market bracket, good for the day, worth up to MAX_NOTIONAL,
+    with its stop-loss under and its take-profit over the current price
   * sells: only shares the account already holds (no short selling)
   * limits: open positions, trades a day, the day's realized loss
 
@@ -27,6 +35,7 @@ import csv
 import datetime
 import importlib.util
 import json
+import math
 import os
 import sys
 import time
@@ -56,6 +65,9 @@ DAILY_STRATEGIES = ("breakout_20d", "bull_flag", "reclaim_ma20", "oversold_bounc
 # traded live; breakout_20d and reclaim_ma20 lost in both backtest periods and in every
 # target/stop variant (journal/backtests/2026-10-29-*), so they are backtested but not traded
 LIVE_STRATEGIES = ("orb", "bull_flag", "oversold_bounce")
+# open positions each strategy may hold at once (sum = MAX_OPEN): on 2026-10-29 orb filled all
+# ten slots by 10:14 and the daily setups found none left at 10:00
+SLOTS = {"orb": 6, "bull_flag": 2, "oversold_bounce": 2}
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 JOURNAL = os.environ.get("TRADER_JOURNAL") or os.path.join(ROOT, "journal")
@@ -90,21 +102,27 @@ def check_order(order, ctx):
     sym = order.get("symbol", "")
     side = order.get("side")
     if side == "buy":
-        if order.get("qty") is not None:
-            raise GuardError("buys go by notional, never qty")
-        try:
-            n = float(order.get("notional"))
-        except (TypeError, ValueError):
-            raise GuardError("a buy needs a notional")
-        if not MIN_NOTIONAL <= n <= MAX_NOTIONAL:
-            raise GuardError("notional %.2f is outside %.2f to %.2f" % (n, MIN_NOTIONAL, MAX_NOTIONAL))
+        bracket = order.get("order_class") == "bracket"
+        if bracket:
+            _check_bracket(order, ctx)
+        else:
+            if order.get("qty") is not None or order.get("order_class"):
+                raise GuardError("a plain buy goes by notional; whole shares go in a bracket")
+            try:
+                n = float(order.get("notional"))
+            except (TypeError, ValueError):
+                raise GuardError("a buy needs a notional")
+            if not MIN_NOTIONAL <= n <= MAX_NOTIONAL:
+                raise GuardError("notional %.2f is outside %.2f to %.2f" % (n, MIN_NOTIONAL, MAX_NOTIONAL))
         if order.get("type") != "market" or order.get("time_in_force") != "day":
             raise GuardError("buys are market orders, good for the day")
         a = ctx.get("asset") or {}
         if a.get("class") != "us_equity":
             raise GuardError("%s is %s, only us_equity" % (sym, a.get("class")))
-        if not (a.get("tradable") and a.get("fractionable") and a.get("status") == "active"):
-            raise GuardError("%s is not an active, tradable, fractionable stock" % sym)
+        if not (a.get("tradable") and a.get("status") == "active"):
+            raise GuardError("%s is not an active, tradable stock" % sym)
+        if not bracket and not a.get("fractionable"):
+            raise GuardError("%s is not fractionable: a notional buy needs that" % sym)
         if sym in ctx.get("positions", {}) or any(t["symbol"] == sym for t in ctx.get("open", [])):
             raise GuardError("already holding %s" % sym)
         if len(ctx.get("open", [])) >= MAX_OPEN:
@@ -126,6 +144,27 @@ def check_order(order, ctx):
             raise GuardError("selling %s %s but holding %s: no short selling" % (q, sym, held))
         return None
     raise GuardError("side must be buy or sell")
+
+
+def _check_bracket(order, ctx):
+    """A bracket buy: whole shares worth MIN_NOTIONAL to MAX_NOTIONAL at ctx["price"],
+    a stop-loss under that price and a take-profit over it."""
+    if order.get("notional") is not None:
+        raise GuardError("a bracket goes by qty, never notional")
+    q = str(order.get("qty", ""))
+    if not q.isdigit() or int(q) < 1:
+        raise GuardError("a bracket buys whole shares, got qty %r" % order.get("qty"))
+    try:
+        px = float(ctx.get("price"))
+        sl = float(order["stop_loss"]["stop_price"])
+        tp = float(order["take_profit"]["limit_price"])
+    except (TypeError, ValueError, KeyError):
+        raise GuardError("a bracket needs the current price, a stop_loss and a take_profit")
+    if not MIN_NOTIONAL <= int(q) * px <= MAX_NOTIONAL:
+        raise GuardError("%s x %.2f = %.2f is outside %.2f to %.2f" % (q, px, int(q) * px, MIN_NOTIONAL,
+                                                                       MAX_NOTIONAL))
+    if not sl < px < tp:
+        raise GuardError("stop %.2f and target %.2f do not bracket %.2f" % (sl, tp, px))
 
 
 # ---------------------------------------------------------------- http
@@ -365,9 +404,63 @@ def positions():
     return {p["symbol"]: float(p["qty"]) for p in api("GET", "/v2/positions")}
 
 
+def free_slot(strategy, open_):
+    """Pure. True while `strategy` holds fewer open positions than its SLOTS share."""
+    return sum(1 for t in open_ if t["strategy"] == strategy) < SLOTS.get(strategy, 0)
+
+
+def bracket_prices(price, stop, target):
+    """Pure. Cents the server accepts: the stop rounded down, the target up, each at least a cent
+    away from the price. None if the risk is too small to bracket."""
+    sl = math.floor(stop * 100) / 100.0
+    tp = math.ceil(target * 100) / 100.0
+    if sl > price - 0.01 or tp < price + 0.01:
+        return None
+    return sl, tp
+
+
+def bracket_exit(parent):
+    """Pure. A bracket parent fetched with nested=true -> (fill price, "target"|"stop", filled_at)
+    once one of its legs has filled, else None."""
+    for leg in parent.get("legs") or []:
+        if leg.get("status") == "filled" and leg.get("filled_avg_price"):
+            return (float(leg["filled_avg_price"]), "target" if leg.get("type") == "limit" else "stop",
+                    leg.get("filled_at"))
+    return None
+
+
+def et_clock(stamp):
+    """Alpaca's UTC timestamp -> HH:MM:SS New York time; now when there is none."""
+    if not stamp:
+        return et_now().strftime("%H:%M:%S")
+    return scan.to_eastern(datetime.datetime.strptime(stamp[:19], "%Y-%m-%dT%H:%M:%S")).strftime("%H:%M:%S")
+
+
+def cancel_and_wait(order_ids, seconds=15):
+    """Cancel the orders that still hold the shares. Returns an order that FILLED before its cancel
+    took (the exit already happened), else None once every order is done."""
+    for oid in order_ids:
+        try:
+            api("DELETE", "/v2/orders/" + oid)
+        except RuntimeError:
+            pass  # already filled, canceled or expired
+    for _ in range(seconds):
+        orders = [api("GET", "/v2/orders/" + oid) for oid in order_ids]
+        for o in orders:
+            if o["status"] == "filled":
+                return o
+        if all(o["status"] in ("canceled", "expired", "rejected", "replaced") for o in orders):
+            return None
+        time.sleep(1)
+    return None
+
+
 def enter(sym, strategy, stop, target, detail, state, price):
     today = et_now().date().isoformat()
     open_ = state["open"]
+    if not free_slot(strategy, open_):
+        log("no free %s slot (%d held), skip %s" % (strategy, SLOTS.get(strategy, 0), sym))
+        return
     if sum(1 for t in open_ if t["strategy"] == strategy) + \
             sum(1 for r in read_trades() if r["date"] == today and r["strategy"] == strategy) >= MAX_PER_STRATEGY:
         return
@@ -375,16 +468,33 @@ def enter(sym, strategy, stop, target, detail, state, price):
         log("skip %s %s: stop %.2f / target %.2f do not bracket %.2f" % (sym, strategy, stop, target, price))
         return
     n_today, pnl_today = day_stats(today)
-    order = {"symbol": sym, "notional": "%.2f" % NOTIONAL, "side": "buy", "type": "market",
-             "time_in_force": "day", "client_order_id": "paper-%s-%s-%d" % (strategy[:8], sym, time.time())}
-    ctx = {"base": PAPER, "asset": api("GET", "/v2/assets/" + urllib.parse.quote(sym)),
+    cid = "paper-%s-%s-%d" % (strategy[:8], sym, time.time())
+    shares = int(NOTIONAL // price)
+    if shares >= 1:
+        # whole shares: one bracket order, the stop and the target both live on the server
+        legs = bracket_prices(price, stop, target)
+        if legs is None:
+            log("skip %s %s: risk under a cent" % (sym, strategy))
+            return
+        order = {"symbol": sym, "qty": str(shares), "side": "buy", "type": "market", "time_in_force": "day",
+                 "order_class": "bracket", "stop_loss": {"stop_price": "%.2f" % legs[0]},
+                 "take_profit": {"limit_price": "%.2f" % legs[1]}, "client_order_id": cid}
+    else:
+        # under one share: a notional buy, then a separate stop; the loop watches the target
+        order = {"symbol": sym, "notional": "%.2f" % NOTIONAL, "side": "buy", "type": "market",
+                 "time_in_force": "day", "client_order_id": cid}
+    ctx = {"base": PAPER, "asset": api("GET", "/v2/assets/" + urllib.parse.quote(sym)), "price": price,
            "positions": positions(), "open": open_, "trades_today": n_today + len(open_), "pnl_today": pnl_today}
     try:
         check_order(order, ctx)
     except GuardError as e:
         log("guard blocked %s %s: %s" % (sym, strategy, e))
         return
-    o = wait_fill(api("POST", "/v2/orders", order)["id"])
+    try:
+        o = wait_fill(api("POST", "/v2/orders", order)["id"])
+    except RuntimeError as e:
+        log("buy %s %s rejected: %s" % (sym, strategy, e))
+        return
     if o["status"] != "filled":
         log("buy %s not filled (%s), cancelling" % (sym, o["status"]))
         try:
@@ -393,38 +503,48 @@ def enter(sym, strategy, stop, target, detail, state, price):
             pass
         return
     qty, fill = float(o["filled_qty"]), float(o["filled_avg_price"])
-    risk = price - stop
-    stop, target = round(fill - risk, 2), round(fill + TARGET_R * risk, 2)
-    trade = {"id": o["id"], "date": today, "symbol": sym, "strategy": strategy, "notional": NOTIONAL,
-             "qty": qty, "entry": fill, "stop": stop, "target": target,
-             "entry_time": et_now().strftime("%H:%M:%S"), "setup_detail": detail, "stop_order": None}
-    sell = {"symbol": sym, "qty": str(qty), "side": "sell", "type": "stop", "stop_price": "%.2f" % stop,
-            "time_in_force": "day"}
-    try:
-        check_order(sell, {"base": PAPER, "positions": positions()})
-        trade["stop_order"] = api("POST", "/v2/orders", sell)["id"]
-    except (GuardError, RuntimeError) as e:
-        log("no server-side stop for %s (%s): the loop watches the stop instead" % (sym, e))
+    trade = {"id": o["id"], "date": today, "symbol": sym, "strategy": strategy, "notional": round(qty * fill, 2),
+             "qty": qty, "entry": fill, "entry_time": et_clock(o.get("filled_at")), "setup_detail": detail,
+             "stop_order": None, "legs": None}
+    if order.get("order_class") == "bracket":
+        parent = api("GET", "/v2/orders/%s?nested=true" % o["id"])
+        trade["legs"] = {leg["type"]: leg["id"] for leg in parent.get("legs") or []}
+        trade["stop"], trade["target"] = legs
+        if set(trade["legs"]) != {"limit", "stop"}:
+            log("bracket %s came back with legs %s: the loop watches stop and target" % (sym, trade["legs"]))
+    else:
+        risk = price - stop
+        trade["stop"], trade["target"] = round(fill - risk, 2), round(fill + TARGET_R * risk, 2)
+        sell = {"symbol": sym, "qty": str(qty), "side": "sell", "type": "stop", "stop_price": "%.2f" % trade["stop"],
+                "time_in_force": "day"}
+        try:
+            check_order(sell, {"base": PAPER, "positions": positions()})
+            trade["stop_order"] = api("POST", "/v2/orders", sell)["id"]
+        except (GuardError, RuntimeError) as e:
+            log("no server-side stop for %s (%s): the loop watches the stop instead" % (sym, e))
     open_.append(trade)
     write_json(jpath("state", "open.json"), state)
-    log("BUY  %s %s  %.6f sh @ %.2f  stop %.2f  target %.2f  (%s)" % (strategy, sym, qty, fill, stop, target, detail))
+    log("BUY  %s %s  %s sh @ %.2f  stop %.2f  target %.2f  %s (%s)" % (
+        strategy, sym, ("%d" % qty) if qty == int(qty) else ("%.6f" % qty), fill, trade["stop"], trade["target"],
+        "bracket" if trade["legs"] else "notional", detail))
 
 
-def close_trade(trade, reason, state, fill=None):
+def close_trade(trade, reason, state, fill=None, when=None):
     sym = trade["symbol"]
     if fill is None:
-        if trade.get("stop_order"):
-            try:
-                api("DELETE", "/v2/orders/" + trade["stop_order"])
-                time.sleep(1)
-            except RuntimeError:
-                pass
-        held = positions().get(sym, 0.0)
-        if held > 0:
-            sell = {"symbol": sym, "qty": str(held), "side": "sell", "type": "market", "time_in_force": "day"}
-            check_order(sell, {"base": PAPER, "positions": {sym: held}})
-            o = wait_fill(api("POST", "/v2/orders", sell)["id"])
-            fill = float(o["filled_avg_price"]) if o.get("filled_avg_price") else None
+        held_by = [i for i in [trade.get("stop_order")] + list((trade.get("legs") or {}).values()) if i]
+        done = cancel_and_wait(held_by) if held_by else None
+        if done is not None:  # the server's stop or target filled first
+            fill, when = float(done["filled_avg_price"]), done.get("filled_at")
+            reason = "target" if done.get("type") == "limit" else "stop"
+        else:
+            held = positions().get(sym, 0.0)
+            if held > 0:
+                sell = {"symbol": sym, "qty": str(held), "side": "sell", "type": "market", "time_in_force": "day"}
+                check_order(sell, {"base": PAPER, "positions": {sym: held}})
+                o = wait_fill(api("POST", "/v2/orders", sell)["id"])
+                if o.get("filled_avg_price"):
+                    fill, when = float(o["filled_avg_price"]), o.get("filled_at")
         if fill is None:
             log("could not close %s: check it by hand" % sym)
             return
@@ -433,7 +553,7 @@ def close_trade(trade, reason, state, fill=None):
     row = dict(trade, exit=round(fill, 4), exit_reason=reason, pnl_usd=round(pnl, 4),
                pnl_pct=round((fill / trade["entry"] - 1) * 100, 3),
                r_multiple=round((fill - trade["entry"]) / risk, 2) if risk > 0 else "",
-               exit_time=et_now().strftime("%H:%M:%S"))
+               exit_time=et_clock(when))
     append_trade(row)
     state["open"] = [t for t in state["open"] if t["id"] != trade["id"]]
     write_json(jpath("state", "open.json"), state)
@@ -445,10 +565,17 @@ def manage(state):
         return
     px = latest_prices([t["symbol"] for t in state["open"]])
     for t in list(state["open"]):
+        if t.get("legs"):
+            ex = bracket_exit(api("GET", "/v2/orders/%s?nested=true" % t["id"]))
+            if ex:
+                close_trade(t, ex[1], state, fill=ex[0], when=ex[2])
+                continue
+            if set(t["legs"]) == {"limit", "stop"}:
+                continue  # both exits are on the server
         if t.get("stop_order"):
             o = api("GET", "/v2/orders/" + t["stop_order"])
             if o["status"] == "filled":
-                close_trade(t, "stop", state, fill=float(o["filled_avg_price"]))
+                close_trade(t, "stop", state, fill=float(o["filled_avg_price"]), when=o.get("filled_at"))
                 continue
         p = px.get(t["symbol"])
         if p is None:
@@ -528,16 +655,24 @@ def cmd_run(a):
     done = set(t["symbol"] for t in state["open"]) | set(r["symbol"] for r in read_trades() if r["date"] == str(today))
     daily_done = os.path.exists(jpath("state", "daily-done-%s" % today))
     last_orb = None
+    deadline = time.time() + 60 * a.max_minutes
     log("run until %s, flat at %s, %d open" % (until, flat_at, len(state["open"])))
     while True:
         t = et_now().time()
         if t >= flat_at:
             for tr in list(state["open"]):
-                close_trade(tr, "close", state)
-            log("flat for the day")
+                try:
+                    close_trade(tr, "close", state)
+                except (GuardError, RuntimeError, urllib.error.URLError) as e:
+                    log("could not close %s: %s" % (tr["symbol"], e))
+            log("flat for the day" if not state["open"] else "%d still open: run `flatten`" % len(state["open"]))
             return
         if t >= until:
             log("stopping at %s with %d open" % (until, len(state["open"])))
+            return
+        if time.time() >= deadline:
+            log("ran %d minutes, stopping with %d open: start `run` again to go on" % (a.max_minutes,
+                                                                                    len(state["open"])))
             return
         try:
             manage(state)
@@ -606,6 +741,7 @@ def main(argv=None):
     r = sub.add_parser("run")
     r.add_argument("--until", default="15:56")
     r.add_argument("--every", type=int, default=60)
+    r.add_argument("--max-minutes", type=int, default=110, help="stop cleanly before a 2-hour job limit")
     sub.add_parser("flatten")
     sub.add_parser("report")
     a = p.parse_args(argv)
