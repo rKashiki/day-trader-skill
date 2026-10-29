@@ -25,3 +25,17 @@
 2026-10-29 10:14:17 ET  orb ITUB: triggered 9:50 AM at 7.47 but now 7.38, missed
 2026-10-29 10:14:17 ET  orb BA: triggered 9:50 AM at 169.17 but now 170.31, missed
 2026-10-29 10:14:17 ET  orb FTNT: triggered 9:50 AM at 135.50 but now 138.18, missed
+2026-10-29 10:14:18 ET  daily ORCL (reclaim_ma20): 139.64 not above the first bar, no entry
+2026-10-29 10:14:18 ET  guard blocked CIFR oversold_bounce: 10 positions open, the limit
+2026-10-29 10:14:18 ET  daily WULF (reclaim_ma20): 12.91 not above the first bar, no entry
+2026-10-29 10:14:18 ET  daily CCC (bull_flag): 7.67 not above the first bar, no entry
+2026-10-29 10:14:18 ET  daily MARA (oversold_bounce): 7.14 not above the first bar, no entry
+2026-10-29 10:14:18 ET  daily XP (oversold_bounce): 15.32 not above the first bar, no entry
+2026-10-29 10:14:18 ET  daily MU (reclaim_ma20): 947.63 not above the first bar, no entry
+2026-10-29 10:14:18 ET  daily AVTR (bull_flag): 16.40 not above the first bar, no entry
+2026-10-29 10:14:18 ET  daily BTG (reclaim_ma20): 4.95 not above the first bar, no entry
+2026-10-29 10:14:18 ET  daily MRNA (reclaim_ma20): 219.41 not above the first bar, no entry
+2026-10-29 10:14:18 ET  daily BAC (oversold_bounce): 51.72 not above the first bar, no entry
+2026-10-29 10:24:41 ET  orb SKHY: triggered 10:20 AM at 163.92 but now 163.53, missed
+2026-10-29 10:29:51 ET  orb OWL: triggered 10:25 AM at 10.18 but now 10.09, missed
+2026-10-29 10:29:51 ET  orb ENPH: triggered 10:25 AM at 25.25 but now 25.19, missed
