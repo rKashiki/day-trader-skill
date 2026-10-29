@@ -1,0 +1,2 @@
+id,date,symbol,strategy,notional,qty,entry,stop,target,exit,exit_reason,pnl_usd,pnl_pct,r_multiple,entry_time,exit_time,setup_detail
+397dfa72-a2cb-4fb3-a7e8-0675df35bc79,2026-10-29,T,orb,2000.0,93.896244131,21.3,21.09,21.72,21.09,stop,-19.7182,-0.986,-1.0,10:13:55,11:26:57,"OR 21.04-21.25, closed 21.35 at 10:10 AM (+0.47% over)"

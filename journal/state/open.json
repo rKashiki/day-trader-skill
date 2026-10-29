@@ -2,20 +2,6 @@
   "open": [
     {
       "date": "2026-10-29",
-      "entry": 21.3,
-      "entry_time": "10:13:55",
-      "id": "397dfa72-a2cb-4fb3-a7e8-0675df35bc79",
-      "notional": 2000.0,
-      "qty": 93.896244131,
-      "setup_detail": "OR 21.04-21.25, closed 21.35 at 10:10 AM (+0.47% over)",
-      "stop": 21.09,
-      "stop_order": "5446f2b6-5fdc-4d1b-a452-f746a0d9f7fd",
-      "strategy": "orb",
-      "symbol": "T",
-      "target": 21.72
-    },
-    {
-      "date": "2026-10-29",
       "entry": 694.37,
       "entry_time": "10:13:57",
       "id": "56ecc8b9-281f-4c00-9d5e-48694d7461e3",
