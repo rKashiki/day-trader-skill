@@ -67,6 +67,18 @@ def walk(bars, k, entry, stop, target, flat_at):
     return bars[j]["c"], "close", j - k
 
 
+def by_day(series):
+    """Split a series into {date: sub-series} once, so session_bars scans one day, not the whole history."""
+    out = {}
+    keys = [k for k in ("t", "o", "h", "l", "c", "v") if series.get(k) is not None]
+    for i, ts in enumerate(series["t"]):
+        d = scan.ts_to_eastern(ts).date()
+        sub = out.setdefault(d, {k: [] for k in keys})
+        for k in keys:
+            sub[k].append(series[k][i])
+    return out
+
+
 def daily_index(series):
     """{date: index} of daily bars, and closes."""
     idx = {}
@@ -92,12 +104,15 @@ def run(a):
         if not ser:
             continue
         didx = daily_index(dser) if dser else {}
+        per_day = by_day(ser)
         dcloses = [float(c) for c in dser["c"]] if dser else []
         for d in days:
             s = scan.session(d)
             close_dt = datetime.datetime.combine(d, s[1])
             flat_at = min(paper.FLAT_AT, (close_dt - datetime.timedelta(minutes=5)).time())
-            bars = scan.session_bars(ser, d, close_dt)
+            if d not in per_day:
+                continue
+            bars = scan.session_bars(per_day[d], d, close_dt)
             if len(bars) < 8 or any(b["h"] is None for b in bars[:paper.OR_BARS]):
                 continue
             if [b["start"] for b in bars[:paper.OR_BARS]] != [scan.slot(d, j) for j in range(paper.OR_BARS)]:

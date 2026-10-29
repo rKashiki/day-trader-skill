@@ -53,6 +53,9 @@ FLAT_AT = datetime.time(15, 55)
 TARGET_R = 2.0                   # the exit planner's default target
 ATR_K = 1.5                      # stop for daily setups: 1.5 x ATR(14) of the session's 5-minute bars
 DAILY_STRATEGIES = ("breakout_20d", "bull_flag", "reclaim_ma20", "oversold_bounce")
+# traded live; breakout_20d and reclaim_ma20 lost in both backtest periods and in every
+# target/stop variant (journal/backtests/2026-10-29-*), so they are backtested but not traded
+LIVE_STRATEGIES = ("orb", "bull_flag", "oversold_bounce")
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 JOURNAL = os.environ.get("TRADER_JOURNAL") or os.path.join(ROOT, "journal")
@@ -503,8 +506,11 @@ def daily_entries(state):
         if p <= bs[0]["c"] and p <= bs[0]["h"]:
             log("daily %s (%s): %.2f not above the first bar, no entry" % (s, h["setups"][0], p))
             continue
+        live = [t for t in h["setups"] if t in LIVE_STRATEGIES]
+        if not live:
+            continue
         atr, n = exitp.atr_of(bs)
-        strategy = h["setups"][0]
+        strategy = live[0]
         enter(s, strategy, p - ATR_K * atr, p + TARGET_R * ATR_K * atr,
               "%s; close %.2f, rsi %.1f; stop %.1f x ATR(%d)=%.3f" % (", ".join(h["setups"]), h["close"], h["rsi"],
                                                                    ATR_K, n, atr), state, p)
