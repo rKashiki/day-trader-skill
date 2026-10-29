@@ -2,20 +2,6 @@
   "open": [
     {
       "date": "2026-10-29",
-      "entry": 694.37,
-      "entry_time": "10:13:57",
-      "id": "56ecc8b9-281f-4c00-9d5e-48694d7461e3",
-      "notional": 2000.0,
-      "qty": 2.880294367,
-      "setup_detail": "OR 676.62-688.87, closed 693.84 at 10:10 AM (+0.72% over)",
-      "stop": 683.28,
-      "stop_order": "f0cae6e4-0133-46e6-8173-50b3db616f87",
-      "strategy": "orb",
-      "symbol": "STX",
-      "target": 716.55
-    },
-    {
-      "date": "2026-10-29",
       "entry": 151.18,
       "entry_time": "10:14:02",
       "id": "f4ba70a1-cc9b-4dc1-a0a1-89944d702036",
