@@ -13,15 +13,15 @@ Stand: 2026-10-29. Fork: `rKashiki/day-trader-skill`. Werkzeug: `trader-paper/pa
 
 | Limit | Wert |
 |---|---|
-| Größe pro Position | 2–5 USD erlaubt, Standard 4 USD (notional-Order, Bruchteilsaktien) |
-| Max. offene Positionen | 10 (also höchstens ca. 40 USD im Markt) |
-| Max. Trades pro Tag | 12, höchstens 4 pro Strategie |
-| Max. Tagesverlust | 2,50 USD, danach keine neuen Trades an dem Tag |
+| Größe pro Position | Übungsphase: bis 2 500 USD, Standard 2 000 USD (notional-Order) |
+| Max. offene Positionen | 10 (also höchstens ca. 20 000 USD im Markt) |
+| Max. Trades pro Tag | 40, höchstens 10 pro Strategie |
+| Max. Tagesverlust | 2 000 USD, danach keine neuen Trades an dem Tag |
 | Haltedauer | nur innerhalb des Tages, nichts über Nacht |
 | Verlustbremse | Stop-Order auf dem Alpaca-Server direkt nach dem Kauf (Bracket-Orders gehen bei Bruchteilen nicht) |
 | Gewinnmitnahme | beim Schließ-Lauf am Nachmittag |
 
-Prüfung vor jeder Order im Code: Abbruch, wenn der Host nicht der Paper-Host ist, wenn der Betrag nicht zwischen 2 und 5 USD liegt,
+Prüfung vor jeder Order im Code: Abbruch, wenn der Host nicht der Paper-Host ist, wenn der Betrag nicht zwischen 2 und 2 500 USD liegt,
 wenn die Assetklasse eine Option ist, wenn ein Verkauf keine passende Long-Position hat oder wenn das Cash nicht reicht.
 
 ## Kontostand am 2026-10-29 (nur gelesen, Rohdaten in `account/`)
@@ -58,9 +58,9 @@ Bis 31.12. gibt es 44 Handelstage.
 | Strategie | Einstieg | Stop | Ziel |
 |---|---|---|---|
 | `orb` | 15-Min-Opening-Range-Breakout (`orb_hit`), 9:50–11:30 ET | Mitte der Opening Range | 2R |
-| `breakout_20d` | Tages-Setup, Einstieg 10:00 ET, wenn über der ersten 5-Min-Kerze | 1,5 × ATR(14) der 5-Min-Kerzen | 2R |
+| `breakout_20d` (nur Backtest) | Tages-Setup, Einstieg 10:00 ET, wenn über der ersten 5-Min-Kerze | 1,5 × ATR(14) der 5-Min-Kerzen | 2R |
 | `bull_flag` | wie oben | wie oben | 2R |
-| `reclaim_ma20` | wie oben | wie oben | 2R |
+| `reclaim_ma20` (nur Backtest) | wie oben | wie oben | 2R |
 | `oversold_bounce` | wie oben | wie oben | 2R |
 
 Alle Positionen werden um 15:55 ET geschlossen (an halben Tagen 12:55).
