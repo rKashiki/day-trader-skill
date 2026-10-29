@@ -16,20 +16,6 @@
     },
     {
       "date": "2026-10-29",
-      "entry": 130.87,
-      "entry_time": "10:14:06",
-      "id": "a9db5208-e541-42bf-87d5-d1906a634563",
-      "notional": 2000.0,
-      "qty": 15.282264842,
-      "setup_detail": "OR 128.54-130.68, closed 131.08 at 10:05 AM (+0.31% over)",
-      "stop": 129.4,
-      "stop_order": "15c019a5-662a-4d1c-bedc-914ce20ba6b6",
-      "strategy": "orb",
-      "symbol": "GLW",
-      "target": 133.81
-    },
-    {
-      "date": "2026-10-29",
       "entry": 59.930223,
       "entry_time": "10:14:10",
       "id": "78bb01ec-0bf8-4b30-bd56-75283d2ec82e",
@@ -55,20 +41,6 @@
       "strategy": "orb",
       "symbol": "SPCX",
       "target": 147.4
-    },
-    {
-      "date": "2026-10-29",
-      "entry": 91.18,
-      "entry_time": "10:14:16",
-      "id": "7525419b-2c62-4f61-b579-bca55dbc15e5",
-      "notional": 2000.0,
-      "qty": 21.934525115,
-      "setup_detail": "OR 89.11-90.39, closed 91.00 at 10:00 AM (+0.67% over)",
-      "stop": 89.93,
-      "stop_order": "de7f4945-38ca-4e91-94bc-95ac4c469ec0",
-      "strategy": "orb",
-      "symbol": "HOOD",
-      "target": 93.68
     }
   ]
 }
