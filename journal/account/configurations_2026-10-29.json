@@ -1,0 +1,10 @@
+{
+    "closing_transactions_only": false,
+    "disable_overnight_trading": false,
+    "fractional_trading": true,
+    "max_margin_multiplier": "1",
+    "no_shorting": false,
+    "ptp_no_exception_entry": false,
+    "suspend_trade": false,
+    "trade_confirm_email": "all"
+}

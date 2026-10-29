@@ -1,0 +1,196 @@
+{
+  "date": "2026-10-29",
+  "hits": [
+    {
+      "close": 17.14,
+      "high20": 16.4,
+      "ma20": 15.3,
+      "rsi": 62.4,
+      "setups": [
+        "breakout_20d"
+      ],
+      "symbol": "SOFI"
+    },
+    {
+      "close": 144.54,
+      "high20": 144.77,
+      "ma20": 135.24,
+      "rsi": 57.5,
+      "setups": [
+        "reclaim_ma20"
+      ],
+      "symbol": "ORCL"
+    },
+    {
+      "close": 8.87,
+      "high20": 15.82,
+      "ma20": 11.27,
+      "rsi": 30.8,
+      "setups": [
+        "oversold_bounce"
+      ],
+      "symbol": "CIFR"
+    },
+    {
+      "close": 13.42,
+      "high20": 15.49,
+      "ma20": 13.1,
+      "rsi": 49.4,
+      "setups": [
+        "reclaim_ma20"
+      ],
+      "symbol": "WULF"
+    },
+    {
+      "close": 164.7,
+      "high20": 195.13,
+      "ma20": 159.04,
+      "rsi": 53.4,
+      "setups": [
+        "reclaim_ma20"
+      ],
+      "symbol": "SKHY"
+    },
+    {
+      "close": 7.67,
+      "high20": 7.82,
+      "ma20": 7.31,
+      "rsi": 65.9,
+      "setups": [
+        "bull_flag"
+      ],
+      "symbol": "CCC"
+    },
+    {
+      "close": 7.35,
+      "high20": 11.33,
+      "ma20": 8.77,
+      "rsi": 31.3,
+      "setups": [
+        "oversold_bounce"
+      ],
+      "symbol": "MARA"
+    },
+    {
+      "close": 6.71,
+      "high20": 6.53,
+      "ma20": 5.78,
+      "rsi": 74.8,
+      "setups": [
+        "breakout_20d"
+      ],
+      "symbol": "RIG"
+    },
+    {
+      "close": 7.07,
+      "high20": 6.7,
+      "ma20": 6.37,
+      "rsi": 59.3,
+      "setups": [
+        "breakout_20d",
+        "reclaim_ma20"
+      ],
+      "symbol": "WEN"
+    },
+    {
+      "close": 16.09,
+      "high20": 32.6,
+      "ma20": 27.29,
+      "rsi": 29.9,
+      "setups": [
+        "oversold_bounce"
+      ],
+      "symbol": "XP"
+    },
+    {
+      "close": 983.23,
+      "high20": 1097.39,
+      "ma20": 968.27,
+      "rsi": 53.1,
+      "setups": [
+        "reclaim_ma20"
+      ],
+      "symbol": "MU"
+    },
+    {
+      "close": 16.69,
+      "high20": 17.29,
+      "ma20": 16.15,
+      "rsi": 60.2,
+      "setups": [
+        "bull_flag"
+      ],
+      "symbol": "AVTR"
+    },
+    {
+      "close": 57.29,
+      "high20": 44.69,
+      "ma20": 39.43,
+      "rsi": 90.4,
+      "setups": [
+        "breakout_20d"
+      ],
+      "symbol": "GMAB"
+    },
+    {
+      "close": 5.12,
+      "high20": 5.31,
+      "ma20": 5.11,
+      "rsi": 49.7,
+      "setups": [
+        "reclaim_ma20"
+      ],
+      "symbol": "BTG"
+    },
+    {
+      "close": 351.81,
+      "high20": 376.51,
+      "ma20": 347.08,
+      "rsi": 52.6,
+      "setups": [
+        "reclaim_ma20"
+      ],
+      "symbol": "AVGO"
+    },
+    {
+      "close": 242.94,
+      "high20": 253.62,
+      "ma20": 226.08,
+      "rsi": 57.0,
+      "setups": [
+        "reclaim_ma20"
+      ],
+      "symbol": "VRT"
+    },
+    {
+      "close": 214.165,
+      "high20": 245.81,
+      "ma20": 211.87,
+      "rsi": 55.0,
+      "setups": [
+        "reclaim_ma20"
+      ],
+      "symbol": "MRNA"
+    },
+    {
+      "close": 396.42,
+      "high20": 462.56,
+      "ma20": 383.65,
+      "rsi": 50.5,
+      "setups": [
+        "reclaim_ma20"
+      ],
+      "symbol": "WDC"
+    },
+    {
+      "close": 50.85,
+      "high20": 54.58,
+      "ma20": 52.27,
+      "rsi": 29.8,
+      "setups": [
+        "oversold_bounce"
+      ],
+      "symbol": "BAC"
+    }
+  ]
+}
