@@ -16,20 +16,6 @@
     },
     {
       "date": "2026-10-29",
-      "entry": 899.79,
-      "entry_time": "10:14:04",
-      "id": "2018dae3-e63f-4988-ab97-ea76fd90c74e",
-      "notional": 2000.0,
-      "qty": 2.222729748,
-      "setup_detail": "OR 865.69-894.72, closed 895.03 at 10:05 AM (+0.03% over)",
-      "stop": 884.97,
-      "stop_order": "9017a1c0-4512-4d75-90ff-b48fafa1a294",
-      "strategy": "orb",
-      "symbol": "GEV",
-      "target": 929.43
-    },
-    {
-      "date": "2026-10-29",
       "entry": 130.87,
       "entry_time": "10:14:06",
       "id": "a9db5208-e541-42bf-87d5-d1906a634563",
