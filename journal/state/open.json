@@ -100,20 +100,6 @@
     },
     {
       "date": "2026-10-29",
-      "entry": 244.43,
-      "entry_time": "10:14:14",
-      "id": "a434c08b-e665-4cd9-8a12-bb44bf27c49c",
-      "notional": 2000.0,
-      "qty": 8.182260769,
-      "setup_detail": "OR 236.62-243.12, closed 244.28 at 10:00 AM (+0.48% over)",
-      "stop": 240.02,
-      "stop_order": "dadd0a36-b365-4b48-9c34-0bcebc7e9971",
-      "strategy": "orb",
-      "symbol": "VRT",
-      "target": 253.25
-    },
-    {
-      "date": "2026-10-29",
       "entry": 91.18,
       "entry_time": "10:14:16",
       "id": "7525419b-2c62-4f61-b579-bca55dbc15e5",
