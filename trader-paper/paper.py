@@ -40,12 +40,12 @@ LIVE = "api.alpaca.markets"
 assert PAPER.startswith("https://paper-") and DATA.startswith("https://data.")
 
 MIN_NOTIONAL = 2.0
-MAX_NOTIONAL = 5.0
-NOTIONAL = 4.0
+MAX_NOTIONAL = 2500.0            # practice phase on paper: about 20,000 USD in the market at most
+NOTIONAL = 2000.0
 MAX_OPEN = 10
-MAX_TRADES_DAY = 12
-MAX_PER_STRATEGY = 4
-MAX_DAY_LOSS = 2.50
+MAX_TRADES_DAY = 40
+MAX_PER_STRATEGY = 10
+MAX_DAY_LOSS = 2000.0
 OR_BARS = 3                      # 15-minute opening range on 5-minute bars
 ORB_UNTIL = datetime.time(11, 30)
 DAILY_AT = datetime.time(10, 0)

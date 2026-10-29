@@ -30,10 +30,10 @@ class Guard(unittest.TestCase):
                 paper.check_order(buy(), ctx(base=base))
 
     def test_notional_bounds(self):
-        for n in ("1.99", "5.01", "100", None, "x"):
+        for n in ("1.99", "2500.01", "100000", None, "x"):
             with self.assertRaises(G):
                 paper.check_order(buy(notional=n), ctx())
-        for n in ("2", "5", "3.5"):
+        for n in ("2", "5", "2000", "2500"):
             paper.check_order(buy(notional=n), ctx())
 
     def test_qty_buy_blocked(self):
