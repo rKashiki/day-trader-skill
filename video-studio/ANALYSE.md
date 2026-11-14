@@ -83,12 +83,12 @@ Das ist ein eingebauter Fortschrittsbalken: Wer sieht „Runde 3 von 5" oder „
 | Element | Was die Videos machen | Für dich übernommen |
 |---------|----------------------|---------------------|
 | **Captions** | Ein einziges Wort gleichzeitig, groß, mittig, fett. Schlüsselwörter in Akzentfarbe. | Engine zeigt Wort für Wort, Akzentfarben pro Wortgruppe |
-| **Farbcode** | Feste Bedeutung: Orange = Zigarette, Cyan = Vape; Rot = Ego; Rot/Blau = Leidenschaft/Distanz | Kühlschrank: Orange/Rot = Wärme, Cyan = Kälte. Motivation: Gold = Gewohnheit/Ziel, Rot = Aufgeben |
+| **Farbcode** | Feste Bedeutung: Orange = Zigarette, Cyan = Vape; Rot = Ego; Rot/Blau = Leidenschaft/Distanz | Kühlschrank: Orange/Rot = Wärme, Cyan = Kälte. Motivation: Gold = Habit/Ziel, Rot = Aufgeben |
 | **Hintergrund** | Dunkel (Schwarz, Navy), damit Farben und Text knallen | Load und Limit: Blaupausen-Navy mit Raster. Motivation: Anthrazit |
 | **Figuren** | Stark vereinfacht: Strichmännchen, runde Figuren, Flat-Tiere. Gesichter mit 2 Punkten und einem Strich reichen für Emotion | Strichmännchen mit Gesichtsausdrücken, Batterien, Sprechblasen |
 | **Bildwechsel** | Pro Satz ein neues Bild (Lila, Eltern) **oder** ein festes Bild, das Schritt für Schritt wächst (Teich, Seelenlabor, Vape) | Beide Pilotvideos nutzen das „wachsende Bild": Der Zuschauer sieht etwas entstehen |
 | **Schnitttempo** | Szenenerkennung: Teich 19 harte Schnitte in 72 s, die anderen fast keine harten Schnitte, dafür ständige Animation | Dauerbewegung (Partikel, Kniebeugen, Zähler) statt harter Schnitte |
-| **Stimme** | KI-Stimme, ruhig, schnell (ca. 2,7–3 Wörter/s), kurze Sätze, fast keine Satzpausen | edge-tts mit automatisch gekürzten Satzpausen |
+| **Stimme** | KI-Stimme, ruhig, schnell (ca. 2,7–3 Wörter/s), kurze Sätze, fast keine Satzpausen | Kokoro (lokal), Stimme am_fenrir: männlich, US-Englisch, energisch; Satzpausen automatisch gekürzt |
 | **Sound** | Musik + Effekte auf Ereignisse (Ticks beim Zähler, Whoosh bei Wechsel) | 11 synthetische SFX, per Zeitstempel an Wörter gekoppelt |
 | **Serie** | „Seelenlabor · Versuch Nr. 006", „Rauchen vs. Vapen"-Titelleiste | „Physik im Alltag #001", „Experiment 001" |
 
@@ -103,38 +103,39 @@ Das ist ein eingebauter Fortschrittsbalken: Wer sieht „Runde 3 von 5" oder „
 
 ---
 
-## 5. Hook-Formeln zum Ausfüllen
+## 5. Hook-Formeln zum Ausfüllen (Videos laufen auf Englisch)
 
-| Formel | Vorlage | Load und Limit | Motivation |
-|--------|---------|----------------|------------|
-| Paradox | „Dein [Alltagsding] macht [das Gegenteil von dem, was du denkst]." | „Dein Kühlschrank macht deine Küche wärmer." | „Je mehr du dich motivierst, desto schneller gibst du auf." |
-| Wettkampf + Wette | „[A] gegen [B]. [N] Runden. Wer [Folge für dich]? Die meisten tippen falsch." | „Wasserkocher gegen Mikrowelle. Vier Runden. Wer kocht billiger?" | „Snooze-Taste gegen Aufstehen. Fünf Runden." |
-| Experiment | „[N] [Figuren] machen dasselbe. Nur einer [Ergebnis]. Und es ist nicht der, auf den du tippst." | „Vier Becher, gleicher Kaffee. Einer ist nach 20 Minuten kalt." | „Vier Leute nehmen sich dasselbe vor. Nur einer schafft es." |
-| Schock-Handlung | „Dieser [Tier/Mensch] [extreme Handlung], damit [Ziel]." | „Diese Flasche wird in drei Stunden explodieren." | „Um zu wachsen, muss dieser Hummer aus seinem eigenen Panzer ausbrechen." |
-| Baukasten | „Wenn du [einfachste Version] machst, hast du [Ding]. Aber…" | „Du willst Essen kalt halten. Also packst du es in eine Kiste. Aber…" | „Du willst jeden Tag trainieren. Also stellst du dir einen Wecker. Aber…" |
-| Autoritäts-Konflikt | „[Autorität] hat dir [etwas] beigebracht, das [nicht stimmt]." | „Dein Physiklehrer hat dir beim Thema Kälte etwas Falsches erzählt." | „Deine Schule hat dir beigebracht, Fehler zu vermeiden. Genau das hält dich klein." |
-| Identität | „Wenn du [Verhalten], dann [überraschende Konsequenz]." | „Wenn du Salz ins Nudelwasser gibst, kocht es später. Nicht früher." | „Wenn du jeden Montag neu anfängst, ist das kein Neustart. Das ist ein Muster." |
+| Formel | Vorlage | Load & Limit | Motivation |
+|--------|---------|--------------|------------|
+| Paradox | "Your [everyday thing] does [the opposite of what you think]." | "Your fridge makes your kitchen hotter." | "The more you motivate yourself, the faster you quit." |
+| Wettkampf + Wette | "[A] vs. [B]. [N] rounds. Which one [consequence for you]? Most people get it wrong." | "Kettle vs. microwave. Four rounds. Which one boils water cheaper?" | "Snooze button vs. getting up. Five rounds." |
+| Experiment | "[N] [characters] do the same thing. Only one [result]. And it's not the one you're betting on." | "Four cups. Same coffee. One is cold after 20 minutes." | "Four people make the same promise. Only one makes it." |
+| Schock-Handlung | "This [animal/person] [extreme action] to [goal]." | "This bottle is going to explode in three hours." | "To grow, this lobster has to break out of its own shell." |
+| Baukasten | "If you [simplest version], you've got a [thing]. But…" | "You want to keep food cold. So you put it in a box. But…" | "You want to work out every day. So you set an alarm. But…" |
+| Autoritäts-Konflikt | "[Authority] taught you [something] that [isn't true]." | "Your physics teacher lied to you about cold." | "School taught you to avoid mistakes. That's exactly what keeps you small." |
+| Identität | "If you [behavior], then [surprising consequence]." | "If you salt your pasta water, it boils later. Not sooner." | "If you start over every Monday, that's not a fresh start. That's a pattern." |
 
-**Re-Hook-Sätze für die Mitte:** „Aber warum?" · „Aber Moment." · „Jetzt passiert etwas Seltsames." · „Und jetzt kommt der Haken." · „Das Verrückte daran:" · „Und genau hier wird es interessant."
+**Re-Hook-Sätze für die Mitte:** "But why?" · "But wait." · "Now something strange happens." · "And here's the catch." · "Here's the crazy part:" · "And this is where it gets interesting."
 
-**Abschluss-Sätze:** Kommentar-Frage („Welcher von den vieren bist du gerade?"), Loop (letzter Satz führt in den ersten), oder Pointe, die den Hook bestätigt („Sie heizt sie.").
+**Abschluss-Sätze:** Kommentar-Frage ("Which of the four are you right now?"), Loop (letzter Satz führt in den ersten), oder Pointe, die den Hook bestätigt ("It heats it.").
 
 ---
 
 ## 6. Wie die zwei Pilotvideos diese Regeln umsetzen
 
-**Load und Limit #001 – Kühlschrank (65 s)**
-- Hook: Paradox „Dein Kühlschrank macht deine Küche wärmer." Im ersten Frame: Kühlschrank, steigendes Thermometer, Hitzewellen, Caption „DEIN".
-- Dauerhafte Frage oben: „KÜHLSCHRANK = HEIZUNG?" (offene Schleife bis zur letzten Sekunde)
-- Kette nach Teich-Prinzip: 5× Aber/Also, eingeblendet als PROBLEM/LÖSUNG-Pille; jedes Bauteil springt groß als Begriff rein (VERDAMPFER, KOMPRESSOR…) und bleibt klein als Beschriftung stehen. Am Ende steht ein komplett beschrifteter Kältekreislauf.
-- Re-Hook: Einschub „Was wirklich kühlt, ist Verdunsten" mit Alltagsbezug (nass aus dem Pool)
-- Twist: „Aber er macht keine Kälte." → offene Tür heizt die Küche. Titel wechselt auf „HEIZUNG." in Rot.
+**Load & Limit #001 – Fridge (66 s, Stimme Kokoro am_fenrir)**
+- Hook: Paradox "Your fridge makes your kitchen hotter." Im ersten Frame: Kühlschrank, steigendes Thermometer, Hitzewellen, Caption „YOUR".
+- Dauerhafte Frage oben: „FRIDGE = HEATER?" (offene Schleife bis zur letzten Sekunde)
+- Kette nach Teich-Prinzip: 5× But/So, eingeblendet als PROBLEM/FIX-Pille; jedes Bauteil springt groß als Begriff rein (EVAPORATOR, COMPRESSOR…) und bleibt klein als Beschriftung stehen. Am Ende steht ein komplett beschrifteter Kältekreislauf.
+- Re-Hook: Einschub "What really cools things down is evaporation" mit Alltagsbezug (aus dem Pool steigen und frieren)
+- Twist: "But it doesn't make cold." → offene Tür heizt die Küche. Titel wechselt auf „HEATER." in Rot.
+- Temperaturen in °F (US-Publikum), in `scene.js` mit `UNIT = 'C'` auf Celsius umschaltbar.
 - Physik geprüft: Kältekreislauf (Verdampfer → Kompressor → Verflüssiger → Kapillarrohr), offene Kühlschranktür erwärmt den Raum netto, weil die Motorarbeit zusätzlich als Wärme abgegeben wird.
 
-**Motivation #001 – Wer hält 365 Tage durch? (56 s)**
-- Hook: Wettkampf + Wette: „Nur einer schafft es. Und es ist nicht der, auf den du tippst."
+**Motivation #001 – Who lasts 365 days? (52 s, Stimme Kokoro am_fenrir)**
+- Hook: Wettkampf + Wette: "Only one makes it. And it's not the one you're betting on."
 - Dauerhafte Frage oben + Tageszähler mit Fortschrittsbalken, Zeitraffer mit Tick-Sounds
-- Falsche Fährte: Gewohnheit hat am Anfang die schwächste (rote) Batterie
-- Re-Hook: „Tag 66. Jetzt passiert etwas Seltsames." Die Batterie von Gewohnheit lädt sich von allein. Fakt dazu: Median 66 Tage bis zur Automatik (Lally et al., 2010, UCL; Spannweite 18–254 Tage)
-- Mid-CTA kurz vor dem Höhepunkt („Folgen für Experiment 002")
-- Ende: Krone, Auflösung in drei Sätzen, dann Nummern 1–4 über den Figuren + „Schreib 1, 2, 3 oder 4 in die Kommentare"
+- Falsche Fährte: Habit hat am Anfang die schwächste (rote) Batterie
+- Re-Hook: "Day 66. Something strange happens." Die Batterie von Habit lädt sich von allein. Fakt dazu: Median 66 Tage bis zur Automatik (Lally et al., 2010, UCL; Spannweite 18–254 Tage), deshalb im Text vorsichtig "Studies suggest it takes about 66 days".
+- Mid-CTA kurz vor dem Höhepunkt („FOLLOW FOR EXPERIMENT 002")
+- Ende: Krone, Auflösung in drei Sätzen, dann Nummern 1–4 über den Figuren + „COMMENT 1, 2, 3 OR 4"

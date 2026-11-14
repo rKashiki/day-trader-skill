@@ -1,36 +1,36 @@
-/* Motivation #001 – "Wer hält 365 Tage durch?"
+/* Motivation #001 – "Who lasts 365 days?" (EN, Stimme: Kokoro am_fenrir)
  * Format: Experiment/Wettkampf. Vier personifizierte Eigenschaften, ein Tageszähler, Batterien.
  * Twist: Gewohnheit startet mit der schwächsten Batterie – und ist am Ende die einzige, die noch trainiert.
  */
-const SERIES = 'EXPERIMENT 001  ·  DURCHHALTEN';
+const SERIES = 'EXPERIMENT 001  ·  CONSISTENCY';
 const C = { bg1: '#0c0c0f', bg2: '#16161c', fig: '#f2f2f2', grey: '#4d4d55', gold: '#f5c542', red: '#ff4d4d', dim: '#7c7c88', floor: '#2a2a33' };
 const LANES = [
   { id: 'M', name: 'MOTIVATION', x: 150 },
   { id: 'T', name: 'TALENT', x: 383 },
-  { id: 'D', name: 'DISZIPLIN', x: 616 },
-  { id: 'G', name: 'GEWOHNHEIT', x: 849 },
+  { id: 'D', name: 'DISCIPLINE', x: 616 },
+  { id: 'G', name: 'HABIT', x: 849 },
 ];
 const F = 1230; // Boden
 
 /* ---------- Zeitmarken ---------- */
 const T = {
-  eins: wt('b1', 'eins'), motivB1: wt('b1', 'Motivation'),
-  gew: wt('b2', 'Gewohnheit'), schwach: wt('b2', 'schwächste'),
-  regnet: wt('b3', 'regnet'), mMotiv: wt('b3', 'Motivation'), mQuit: wt('b3', 'liegen'),
-  talent: wt('b4', 'Talent'), tQuit: wt('b4', 'auf'), schwer: wt('b4', 'schwer'), langw: wt('b4', 'langweilig'),
-  seltsam: wt('b5', 'Seltsames'), laedt: wt('b6', 'lädt'), allein: wt('b6', 'allein'),
-  schnitt: wt('b7', 'sechsundsechzig'), automatik: wt('b7', 'Automatik'),
-  dEnd: wt('b8', 'Disziplin'), ende: wt('b8', 'Ende'), uebern: wt('b9', 'übernimmt'), gewB9: wt('b9', 'Gewohnheit'),
-  d365: wt('b10', 'dreihundertfünfundsechzig', 0, 'end'),
-  hiM: wt('b11', 'Motivation'), hiD: wt('b11', 'Disziplin'), hiG: wt('b11', 'Aber'), musst: wt('b11', 'musst'),
-  frage: wt('b12', 'Welcher'),
+  eins: wt('b1', '1'), motivB1: wt('b1', 'Motivation'),
+  gew: wt('b2', 'Habit'), schwach: wt('b2', 'weakest'),
+  regnet: wt('b3', 'raining'), mMotiv: wt('b3', 'Motivation'), mQuit: wt('b3', 'bed'),
+  talent: wt('b4', 'Talent'), tQuit: wt('b4', 'quits'), schwer: wt('b4', 'hard'), langw: wt('b4', 'boring'),
+  seltsam: wt('b5', 'strange'), laedt: wt('b6', 'charging'), allein: wt('b6', 'itself'),
+  schnitt: wt('b7', '66'), automatik: wt('b7', 'automatic'),
+  dEnd: wt('b8', 'Discipline'), ende: wt('b8', 'empty'), uebern: wt('b9', 'takes'), gewB9: wt('b9', 'Habit'),
+  d365: wt('b10', '365', 0, 'end'),
+  hiM: wt('b11', 'Motivation'), hiD: wt('b11', 'Discipline'), hiG: wt('b11', 'But'), musst: wt('b11', 'anymore'),
+  frage: wt('b12', 'Which'),
 };
 const DAYKEYS = [
-  [bs('b3') - .05, wt('b3', 'zwölf', 0, 'end'), 12],
-  [bs('b4') - .05, wt('b4', 'neununddreißig', 0, 'end'), 39],
-  [bs('b5') - .05, wt('b5', 'sechsundsechzig', 0, 'end'), 66],
-  [bs('b8') - .05, wt('b8', 'hundertachtzig', 0, 'end'), 180],
-  [bs('b10') - .05, wt('b10', 'dreihundertfünfundsechzig', 0, 'end'), 365],
+  [bs('b3') - .05, wt('b3', '12', 0, 'end'), 12],
+  [bs('b4') - .05, wt('b4', '39', 0, 'end'), 39],
+  [bs('b5') - .05, wt('b5', '66', 0, 'end'), 66],
+  [bs('b8') - .05, wt('b8', '180', 0, 'end'), 180],
+  [bs('b10') - .05, wt('b10', '365', 0, 'end'), 365],
 ];
 function dayF(t) {
   let prev = 1;
@@ -141,7 +141,7 @@ function background(t) {
 }
 function header(t) {
   txt(SERIES, W / 2, 250, { font: 'JetBrains Mono', weight: 700, size: 28, color: C.dim, spacing: 2 });
-  txt('WER HÄLT 365 TAGE DURCH?', W / 2, 330, { font: 'Anton', weight: 400, size: 84, color: '#ffffff' });
+  txt('WHO LASTS 365 DAYS?', W / 2, 330, { font: 'Anton', weight: 400, size: 100, color: '#ffffff' });
 }
 function counter(t) {
   const d = Math.max(1, Math.round(dayF(t)));
@@ -150,7 +150,7 @@ function counter(t) {
   const k = counting ? 1.06 : 1;
   ctx.save(); ctx.translate(W / 2, 470); ctx.scale(k, k);
   ctx.font = '400 150px Anton'; ctx.textBaseline = 'middle';
-  const label = 'TAG ', num = String(d);
+  const label = 'DAY ', num = String(d);
   ctx.font = '400 70px Anton'; const wl = ctx.measureText(label).width;
   ctx.font = '400 150px Anton'; const wn = ctx.measureText(num).width;
   ctx.font = '400 70px Anton'; const ws = ctx.measureText(' / 365').width;
@@ -187,7 +187,7 @@ function laneHighlight(t) {
     const k = ease(t, a, .3, E.outBack) * (1 - prog(t, b - .2, b));
     ctx.save(); ctx.strokeStyle = C.gold; ctx.lineWidth = 6; ctx.globalAlpha = clamp(k); ctx.shadowColor = C.gold; ctx.shadowBlur = 25;
     rr(lane.x - 112, 740, 224, F - 740 + 85, 22); ctx.stroke(); ctx.restore();
-    const lbl = { M: 'START', D: 'HARTE TAGE', G: 'ZIEL' }[id];
+    const lbl = { M: 'START', D: 'HARD DAYS', G: 'FINISH' }[id];
     txt(lbl, lane.x, 702, { font: 'Inter', weight: 900, size: 34, color: C.gold, alpha: clamp(k), spacing: 3 });
   }
   if (t >= T.frage) {
@@ -198,7 +198,7 @@ function laneHighlight(t) {
       ctx.fillStyle = C.gold; ctx.beginPath(); ctx.arc(0, 0, 42, 0, 7); ctx.fill();
       txt(String(i + 1), 0, 4, { font: 'Anton', size: 58, color: '#111' }); ctx.restore();
     });
-    txt('SCHREIB 1, 2, 3 ODER 4 IN DIE KOMMENTARE', W / 2, 640, { font: 'JetBrains Mono', weight: 800, size: 30, color: C.gold, alpha: ease(t, T.frage + .5, .4) });
+    txt('COMMENT 1, 2, 3 OR 4', W / 2, 630, { font: 'JetBrains Mono', weight: 800, size: 42, color: C.gold, alpha: ease(t, T.frage + .5, .4) });
   }
 }
 function midCta(t) {
@@ -207,7 +207,7 @@ function midCta(t) {
   const k = ease(t, a0, .3, E.outBack) * (1 - prog(t, a1 - .3, a1));
   ctx.save(); ctx.translate(W / 2, 645); ctx.scale(k, k);
   ctx.fillStyle = '#ffffff'; rr(-260, -30, 520, 60, 30); ctx.fill();
-  txt('FOLGEN FÜR EXPERIMENT 002', 0, 2, { font: 'Inter', weight: 900, size: 28, color: '#111', spacing: 2 });
+  txt('FOLLOW FOR EXPERIMENT 002', 0, 2, { font: 'Inter', weight: 900, size: 28, color: '#111', spacing: 2 });
   ctx.restore();
 }
 
@@ -221,20 +221,19 @@ function draw(ctx, t) {
   crown(LANES[3].x, 772, ease(t, T.d365 + .1, .5, E.outBack) * (1 - ease(t, T.frage, .25)));
   // Sprechblasen
   const B = 795;
-  bubble('Diesmal zieh ich’s durch!', LANES[0].x, B, t, T.motivB1, be('b1') + .4, { size: 38 });
-  bubble('Morgen wieder…', LANES[0].x, B, t, T.mMotiv - .2, T.mQuit + 1, { size: 38 });
-  bubble('Zu einfach.', LANES[1].x, B, t, T.talent, T.schwer, { size: 38 });
-  bubble('Langweilig.', LANES[1].x, B, t, T.langw - .1, be('b4') + .3, { size: 38 });
-  bubble('Ich muss. Ich muss.', LANES[2].x, B, t, T.dEnd - .2, T.uebern, { size: 38 });
+  bubble('This time I’m all in!', LANES[0].x, B, t, T.motivB1, be('b1') + .4, { size: 38 });
+  bubble('Tomorrow. For sure…', LANES[0].x, B, t, T.mMotiv - .2, T.mQuit + 1, { size: 38 });
+  bubble('Too easy.', LANES[1].x, B, t, T.talent, T.schwer, { size: 38 });
+  bubble('Boring.', LANES[1].x, B, t, T.langw - .1, be('b4') + .3, { size: 38 });
+  bubble('I have to. I have to.', LANES[2].x, B, t, T.dEnd - .2, T.uebern, { size: 38 });
   rain(t);
   midCta(t);
   laneHighlight(t);
   captions(t, {
     y: 1440, size: 128,
-    accentWords: ['Gewohnheit', 'sechsundsechzig', 'Automatik', 'dreihundertfünfundsechzig', 'Ziel', 'Seltsames', 'allein', 'entscheiden'],
+    accentWords: ['Habit', '66', 'automatic', '365', 'finish', 'strange', 'itself', 'charging'],
     accent: C.gold,
-    display: { eins: '1', zwölf: '12', neununddreißig: '39', sechsundsechzig: '66', hundertachtzig: '180', dreihundertfünfundsechzig: '365' },
-    accents: [{ words: ['Motivation', 'Talent', 'Disziplin', 'schwächste', 'Ende', 'liegen', 'langweilig'], color: '#ff6b6b' }],
+    accents: [{ words: ['Motivation', 'Talent', 'Discipline', 'weakest', 'empty', 'bed', 'boring', 'quits'], color: '#ff6b6b' }],
   });
   const f = ease(t, T.d365, .15) * (1 - prog(t, T.d365 + .15, T.d365 + .7));
   if (f > 0) { ctx.fillStyle = `rgba(245,197,66,${.28 * f})`; ctx.fillRect(0, 0, W, H); }
@@ -247,7 +246,7 @@ function cues() {
   for (const [a, b] of DAYKEYS) { const n = Math.max(3, Math.round((b - a) / .09)); for (let i = 0; i < n; i++) cue(a + (b - a) * i / n, 'tick', .35); }
   cue(T.regnet - .2, 'whoosh', .4); cue(T.mQuit + .25, 'fail', .5);
   cue(T.tQuit + .25, 'fail', .45); cue(T.langw + .4, 'pop', .4);
-  cue(T.seltsam + .3, 'riser', .5); cue(T.laedt, 'riser', .35); cue(T.allein + .3, 'ding', .55);
+  cue(T.seltsam + .3, 'riser', .5); cue(T.laedt, 'riser', .35); cue(be('b6'), 'pop', .45);
   cue(T.automatik + .5, 'pop', .4);
   cue(bs('b8') + .2, 'pop', .35); cue(T.dEnd, 'heartbeat', .45); cue(T.dEnd + .8, 'heartbeat', .4);
   cue(T.uebern + .2, 'whoosh', .45);

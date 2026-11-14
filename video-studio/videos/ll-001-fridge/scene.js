@@ -1,8 +1,10 @@
-/* Load und Limit #001 – "Dein Kühlschrank heizt deine Küche"
- * Format: Problem-Lösungs-Kette. Jedes "Aber" = neues Problem, jedes "Also" = neues Bauteil.
+/* Load & Limit #001 – "Your fridge is heating your kitchen" (EN, Stimme: Kokoro am_fenrir)
+ * Format: Problem-Lösungs-Kette. Jedes "But" = neues Problem, jedes "So" = neues Bauteil.
  * Am Ende steht ein beschrifteter Kühlschrank-Kreislauf, und die Pointe schließt den Hook.
  */
-const BRAND = 'LOAD UND LIMIT';
+const BRAND = 'LOAD & LIMIT';
+const UNIT = 'F'; // 'F' = Fahrenheit (US-Publikum), 'C' = Celsius
+const fmtT = (c, d = 1) => UNIT === 'F' ? (c * 9 / 5 + 32).toFixed(d) + ' °F' : c.toFixed(d) + ' °C';
 const C = {
   bg1: '#071224', bg2: '#0d2140', grid: 'rgba(90,150,230,0.09)', gridMaj: 'rgba(90,150,230,0.17)',
   line: '#d6e6ff', dim: '#6f8fbf', hot: '#ff4a2e', warm: '#ffa53c', cold: '#3cc8ff', vapor: '#c4ecff',
@@ -28,20 +30,20 @@ let U_TOTAL = 0; SECTIONS.forEach(s => { s.u0 = U_TOTAL; s.len = P[s.k].total; U
 const T = {};
 function times() {
   Object.assign(T, {
-    falsch: wt('h2', 'falsch'), bau: wt('h2', 'bau'),
-    essen: wt('b1', 'Essen'), kiste: wt('b1', 'Kiste'), also1: wt('b1', 'Also'),
-    aber1: wt('b2', 'Aber'), waerme: wt('b2', 'Wärme'), rein: wt('b2', 'rein'),
-    daemm: wt('b3', 'dämmst'), bremst: wt('b3', 'bremst'), stoppt: wt('b3', 'Stoppt'),
-    verdunst: wt('b5', 'Verdunsten'), friert: wt('b5', 'frierst'), pool: wt('b5', 'Pool'),
-    rohr: wt('b6', 'Rohr'), fluess: wt('b6', 'Flüssigkeit'), verdampft: wt('b6', 'verdampft'), also6: wt('b6', 'Also'),
-    saugt: wt('b7', 'saugt'), verdampfer: wt('b7', 'Verdampfer'),
-    aber8: wt('b8', 'Aber'), gas8: wt('b8', 'Gas'),
-    also9: wt('b9', 'Also'), pumpe: wt('b9', 'Pumpe'), zusammen: wt('b9', 'zusammen'), heiss: wt('b9', 'heiß'), kueche9: wt('b9', 'Küche'), kompressor: wt('b9', 'Kompressor'),
-    gitter: wt('b10', 'Gitter'), hitze: wt('b10', 'Hitze'), fluessig: wt('b10', 'flüssig'), verfl: wt('b10', 'Verflüssiger'),
-    roehr: wt('b11', 'haarfeines'), druck: wt('b11', 'Druck'), eiskalt: wt('b11', 'eiskalt'),
-    vorn: wt('b12', 'beginnt'), glueck: wt('b13', 'Glückwunsch'), gebaut: wt('b13', 'gebaut'),
-    aber14: wt('b14', 'Aber'), kaelte: wt('b14', 'Kälte'), schaufelt: wt('b14', 'schaufelt'), motor: wt('b14', 'Abwärme'),
-    offene: wt('b15', 'offene'), tuer: wt('b15', 'Kühlschranktür'), kueche15: wt('b15', 'Küche'), heizt: wt('b16', 'sie', 1),
+    falsch: wt('h2', 'wrong'), bau: wt('h2', 'build'),
+    essen: wt('b1', 'food'), kiste: wt('b1', 'box'), also1: wt('b1', 'So'),
+    aber1: wt('b2', 'But'), waerme: wt('b2', 'heat'), rein: wt('b2', 'walls'),
+    daemm: wt('b3', 'insulate'), bremst: wt('b3', 'slows'), stoppt: wt('b3', 'But'), also3: wt('b3', 'So'),
+    was5: wt('b5', 'What'), verdunst: wt('b5', 'evaporation'), friert: wt('b5', 'shiver'), pool: wt('b5', 'pool'),
+    rohr: wt('b6', 'pipe'), fluess: wt('b6', 'liquid'), verdampft: wt('b6', 'boils'), also6: wt('b6', 'So'),
+    saugt: wt('b7', 'sucks'), verdampfer: wt('b7', 'evaporator'),
+    aber8: wt('b8', 'But'), gas8: wt('b8', 'gas'),
+    also9: wt('b9', 'So'), pumpe: wt('b9', 'pump'), zusammen: wt('b9', 'squeezes'), heiss: wt('b9', 'hot'), kueche9: wt('b9', 'kitchen'), kompressor: wt('b9', 'compressor'),
+    gitter: wt('b10', 'grid'), hitze: wt('b10', 'heat'), fluessig: wt('b10', 'liquid'), verfl: wt('b10', 'condenser'),
+    roehr: wt('b11', 'super'), tube: wt('b11', 'tube'), druck: wt('b11', 'pressure'), eiskalt: wt('b11', 'ice'),
+    vorn: wt('b12', 'starts'), glueck: wt('b13', 'Congrats'), gebaut: wt('b13', 'built'),
+    aber14: wt('b14', 'But'), kaelte: wt('b14', 'cold'), schaufelt: wt('b14', 'shovels'), motor: wt('b14', 'Plus'),
+    offene: wt('b15', 'leaving'), tuer: wt('b15', 'door'), kueche15: wt('b15', 'kitchen'), heizt: wt('b16', 'it', 1),
   });
 }
 times();
@@ -60,10 +62,10 @@ function background(t) {
   v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,0.55)'); ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
 }
 function header(t) {
-  txt(`${BRAND}  ·  PHYSIK IM ALLTAG #001`, W / 2, 250, { font: 'JetBrains Mono', weight: 700, size: 28, color: C.dim, spacing: 2 });
+  txt(`${BRAND}  ·  EVERYDAY PHYSICS #001`, W / 2, 250, { font: 'JetBrains Mono', weight: 700, size: 28, color: C.dim, spacing: 2 });
   const solved = t >= T.heizt;
-  ctx.save(); ctx.font = '400 84px Anton'; ctx.textBaseline = 'middle';
-  const a = 'KÜHLSCHRANK = ', b = solved ? 'HEIZUNG.' : 'HEIZUNG?';
+  ctx.save(); ctx.font = '400 104px Anton'; ctx.textBaseline = 'middle';
+  const a = 'FRIDGE = ', b = solved ? 'HEATER.' : 'HEATER?';
   const wa = ctx.measureText(a).width, wb = ctx.measureText(b).width, x0 = W / 2 - (wa + wb) / 2;
   ctx.textAlign = 'left'; ctx.fillStyle = C.white; ctx.fillText(a, x0, 330);
   ctx.fillStyle = solved ? C.hot : C.warm; if (solved) { ctx.shadowColor = C.hot; ctx.shadowBlur = 30; }
@@ -71,8 +73,8 @@ function header(t) {
 }
 /** PROBLEM/LÖSUNG-Pille: macht die Kette sichtbar. */
 const PILLS = () => [
-  [T.also1, 'LÖSUNG', C.ok], [T.aber1, 'PROBLEM', C.hot], [wt('b3', 'Also'), 'LÖSUNG', C.ok], [T.stoppt, 'PROBLEM', C.hot],
-  [T.also6, 'LÖSUNG', C.ok], [T.aber8, 'PROBLEM', C.hot], [T.also9, 'LÖSUNG', C.ok],
+  [T.also1, 'FIX', C.ok], [T.aber1, 'PROBLEM', C.hot], [T.also3, 'FIX', C.ok], [T.stoppt, 'PROBLEM', C.hot],
+  [T.also6, 'FIX', C.ok], [T.aber8, 'PROBLEM', C.hot], [T.also9, 'FIX', C.ok],
 ];
 function pills(t) {
   if (t >= T.offene) return;
@@ -122,7 +124,7 @@ function hookFridge(t) {
   ctx.restore();
   // Küchenthermometer
   const temp = 21 + 0.8 * ease(t, .2, 2.2, E.inOutCubic);
-  thermometer(860, 640, 1060, .45 + (temp - 21) * .35, C.hot, 'KÜCHE', temp.toFixed(1).replace('.', ',') + ' °C', 1 - out);
+  thermometer(860, 640, 1060, .45 + (temp - 21) * .35, C.hot, 'KITCHEN', fmtT(temp), 1 - out);
   if (t < T.bau) arrow(930, 900, 930, 760 - 30 * Math.sin(t * 6), { color: C.hot, width: 10, glow: C.hot, alpha: ease(t, .4, .3) });
   if (glitch || between(t, T.falsch, T.bau)) {
     const q = ease(t, T.falsch, .2, E.outBack);
@@ -194,7 +196,7 @@ function hatch(x, y, w, h) {
 }
 /** Wärme, die durch die Wände kriecht (b2/b3). */
 function leakArrows(t) {
-  const a0 = T.waerme, a1 = wt('b5', 'Was');
+  const a0 = T.waerme, a1 = T.was5;
   if (t < a0 || t > a1 + .4) return;
   const fadeOut = 1 - prog(t, a1, a1 + .4);
   const slow = ease(t, T.bremst, .6);
@@ -218,8 +220,8 @@ function insideTemp(t) {
   v -= 14 * ease(t, T.saugt, 2.2, E.inOutCubic);
   const col = mixColor(C.cold, C.hot, (v - 4) / 14);
   const a = ease(t, T.kiste, .3) * (1 - prog(t, T.glueck - .3, T.glueck));
-  txt(v.toFixed(1).replace('.', ',') + ' °C', 400, 935, { font: 'JetBrains Mono', size: 58, weight: 800, color: col, alpha: a });
-  txt('INNEN', 400, 885, { font: 'JetBrains Mono', size: 24, weight: 700, color: C.dim, alpha: a });
+  txt(fmtT(v), 400, 935, { font: 'JetBrains Mono', size: 58, weight: 800, color: col, alpha: a });
+  txt('INSIDE', 400, 885, { font: 'JetBrains Mono', size: 24, weight: 700, color: C.dim, alpha: a });
 }
 
 /* ---------- Kältekreislauf ---------- */
@@ -306,7 +308,7 @@ function condenserHeat(t) {
 function compHeat(t) {
   if (t < T.heiss) return;
   const a = ease(t, T.heiss, .4);
-  txt(t < T.kueche9 ? '70 °C' : '70 °C  >  KÜCHE 21 °C', 825, 1320, { font: 'JetBrains Mono', size: 34, weight: 800, color: C.hot, alpha: a * (1 - prog(t, T.kompressor + 1.5, T.kompressor + 2)) });
+  txt(t < T.kueche9 ? fmtT(70, 0) : `${fmtT(70, 0)}  >  KITCHEN ${fmtT(21, 0)}`, 700, 1322, { font: 'JetBrains Mono', size: 30, weight: 800, color: C.hot, alpha: a * (1 - prog(t, T.kompressor + 1.5, T.kompressor + 2)) });
 }
 /** Begriffe springen groß rein und bleiben dann klein als Beschriftung stehen. */
 function term(label, x, y, t, t0, sx, sy) {
@@ -323,7 +325,7 @@ function term(label, x, y, t, t0, sx, sy) {
 
 /* ---------- Einschub: Verdunsten (b5) ---------- */
 function evapInset(t) {
-  const a0 = wt('b5', 'Was') - .1, a1 = wt('b6', 'Also');
+  const a0 = T.was5 - .1, a1 = T.also6;
   if (t < a0 || t > a1 + .35) return;
   const k = ease(t, a0, .4, E.outBack) * (1 - ease(t, a1, .35, E.inCubic));
   ctx.save(); ctx.fillStyle = `rgba(4,10,22,${.75 * clamp(k)})`; ctx.fillRect(0, 380, W, 1000); ctx.restore();
@@ -355,7 +357,7 @@ function evapInset(t) {
     const a = i * 1.6 + t; txt('✱', 120 + Math.cos(a) * 30, -120 + i * 60, { size: 40, color: C.cold, alpha: .6 + .4 * Math.sin(t * 6 + i) });
   }
   ctx.restore();
-  txt('VERDUNSTEN = KÜHLEN', 0, 375, { font: 'Inter', weight: 900, size: 44, color: C.cold, alpha: ease(t, T.verdunst, .3), spacing: 3 });
+  txt('EVAPORATION = COOLING', 0, 375, { font: 'Inter', weight: 900, size: 44, color: C.cold, alpha: ease(t, T.verdunst, .3), spacing: 3 });
   ctx.restore();
 }
 
@@ -388,7 +390,7 @@ function heatTransfer(t) {
   const p1 = path([[330, 930], [450, 860], [600, 860], [700, 900], [780, 940]]);
   strokePath(p1, k1, C.warm, 26, { glow: C.warm, alpha: a });
   if (k1 >= 1) arrow(760, 925, 830, 960, { color: C.warm, width: 26, head: 70, glow: C.warm, alpha: a });
-  txt('WÄRME VON INNEN', 470, 800, { font: 'Inter', weight: 900, size: 34, color: C.warm, alpha: a * ease(t, T.schaufelt + .3, .3), spacing: 2 });
+  txt('HEAT FROM INSIDE', 470, 800, { font: 'Inter', weight: 900, size: 34, color: C.warm, alpha: a * ease(t, T.schaufelt + .3, .3), spacing: 2 });
   const k2 = ease(t, T.motor, .6, E.outBack);
   if (k2 > 0) {
     arrow(825, 1150, 825, 1060 - 30 * k2, { color: C.hot, width: 22, head: 60, glow: C.hot, alpha: a * clamp(k2) });
@@ -416,8 +418,8 @@ function kitchenReadout(t) {
   ctx.save(); ctx.translate(540 + sx, 425 + sy); ctx.scale(k, k);
   ctx.fillStyle = mixColor('#0b1a30', '#4a0f08', red); ctx.strokeStyle = mixColor('#ffa53c', '#ff4a2e', red); ctx.lineWidth = 5;
   rr(-270, -42, 540, 84, 42); ctx.fill(); ctx.stroke();
-  txt('KÜCHE', -150, 2, { font: 'JetBrains Mono', size: 34, weight: 800, color: C.dim });
-  txt(v.toFixed(1).replace('.', ',') + ' °C', 60, 2, { font: 'JetBrains Mono', size: 46, weight: 800, color: mixColor('#ffa53c', '#ff4a2e', red) });
+  txt('KITCHEN', -150, 2, { font: 'JetBrains Mono', size: 34, weight: 800, color: C.dim });
+  txt(fmtT(v), 60, 2, { font: 'JetBrains Mono', size: 46, weight: 800, color: mixColor('#ffa53c', '#ff4a2e', red) });
   arrow(205, 22, 205, -22, { color: C.hot, width: 8, head: 26 });
   ctx.restore();
 }
@@ -425,7 +427,7 @@ function finalFlash(t) {
   const a = (1 - prog(t, T.heizt, T.heizt + .5)) * (t >= T.heizt ? .35 : 0);
   if (a > 0) { ctx.fillStyle = `rgba(255,74,46,${a})`; ctx.fillRect(0, 0, W, H); }
   const k = ease(t, be('b16', .35), .4);
-  if (k > 0) txt('FOLGE FÜR MEHR ALLTAGSPHYSIK', W / 2, 1585, { font: 'Inter', weight: 800, size: 30, color: C.dim, alpha: k, spacing: 3 });
+  if (k > 0) txt('FOLLOW FOR MORE EVERYDAY PHYSICS', W / 2, 1585, { font: 'Inter', weight: 800, size: 30, color: C.dim, alpha: k, spacing: 3 });
 }
 
 /* ---------- Frame ---------- */
@@ -434,7 +436,7 @@ function draw(ctx, t) {
   header(t);
   hookFridge(t);
   const b = build(t);
-  const stageA = 1 - .82 * ease(t, wt('b5', 'Was') - .1, .3) * (1 - ease(t, wt('b6', 'Also'), .3));
+  const stageA = 1 - .82 * ease(t, T.was5 - .1, .3) * (1 - ease(t, T.also6, .3));
   ctx.save(); ctx.globalAlpha = stageA;
   leakArrows(t);
   food(t);
@@ -448,10 +450,10 @@ function draw(ctx, t) {
   evapBubbles(t); foodHeat(t); insideTemp(t);
   condenserHeat(t); compHeat(t); coldSpill(t);
   if (t > T.gas8 && t < T.pumpe) txt('?', 700, 1300, { font: 'Anton', size: 120 * ease(t, T.gas8, .3, E.outBack), color: C.gas, stroke: 10, strokeColor: '#071224' });
-  term('VERDAMPFER', 405, 600, t, T.verdampfer - .05, 405, 600);
-  term('KOMPRESSOR', 825, 1330, t, T.kompressor - .05, 825, 1312);
-  term('VERFLÜSSIGER', 830, 560, t, T.verfl - .05, 830, 560);
-  term('KAPILLARROHR', 690, 450, t, wt('b11', 'Röhrchen') - .05, 690, 500);
+  term('EVAPORATOR', 405, 600, t, T.verdampfer - .05, 405, 600);
+  term('COMPRESSOR', 825, 1330, t, T.kompressor - .05, 825, 1312);
+  term('CONDENSER', 830, 560, t, T.verfl - .05, 830, 560);
+  term('CAPILLARY TUBE', 690, 450, t, T.tube - .05, 690, 500);
   shell(t); noCold(t); heatTransfer(t);
   ctx.restore();
   evapInset(t);
@@ -459,9 +461,9 @@ function draw(ctx, t) {
   kitchenReadout(t);
   captions(t, {
     y: 1470, size: 132,
-    accentWords: ['Kühlschrank', 'wärmer', 'falsch', 'Wärme', 'Hitze', 'heiß', 'Heißer', 'Kompressor', 'Verflüssiger', 'Abwärme', 'Motor', 'heizt', 'warmem'],
+    accentWords: ['fridge', 'hotter', 'wrong', 'heat', 'hot', 'compressor', 'condenser', 'motor', 'warm', 'dumps'],
     accent: '#ff6a3d',
-    accents: [{ words: ['kalt', 'Verdunsten', 'frierst', 'Verdampfer', 'verdampft', 'eiskalt', 'Kälte', 'Flüssigkeit', 'dämmst', 'Druck'], color: C.cold }],
+    accents: [{ words: ['cold', 'cool', 'evaporat', 'shiver', 'boils', 'freezing', 'ice', 'insulate', 'pressure', 'liquid'], color: C.cold }],
   });
   finalFlash(t);
 }
@@ -470,12 +472,12 @@ function cues() {
   cue(0, 'riser', .25); cue(T.falsch, 'glitch', .6); cue(T.bau, 'whoosh', .7);
   cue(T.essen, 'pop', .5); cue(T.essen + .12, 'pop', .45); cue(T.essen + .24, 'pop', .45); cue(T.kiste - .2, 'whoosh', .35);
   PILLS().forEach(([t0, l]) => cue(t0, l === 'PROBLEM' ? 'fail' : 'pop', l === 'PROBLEM' ? .35 : .5));
-  cue(T.daemm, 'whoosh', .35); cue(wt('b5', 'Was') - .1, 'whoosh', .6); cue(T.friert, 'heartbeat', .25);
-  cue(wt('b6', 'Also'), 'whoosh', .5); cue(T.verdampft + .45, 'sizzle', .25);
+  cue(T.daemm, 'whoosh', .35); cue(T.was5 - .1, 'whoosh', .6); cue(T.friert, 'heartbeat', .25);
+  cue(T.also6, 'whoosh', .5); cue(T.verdampft + .45, 'sizzle', .25);
   cue(T.verdampfer, 'ding', .5); cue(T.pumpe, 'pop', .6);
   for (let k = 0; k < 6; k++) cue(T.zusammen + k * .35, 'pump', .35);
   cue(T.heiss + .3, 'sizzle', .35); cue(T.kompressor, 'ding', .5); cue(T.hitze, 'sizzle', .35); cue(T.verfl, 'ding', .5);
-  cue(T.druck, 'whoosh', .4); cue(T.eiskalt, 'glitch', .25); cue(wt('b11', 'Röhrchen'), 'pop', .4);
+  cue(T.druck, 'whoosh', .4); cue(T.eiskalt, 'glitch', .25); cue(T.tube, 'pop', .4);
   cue(T.vorn, 'riser', .45); cue(T.glueck, 'ding', .7); cue(T.gebaut, 'pop', .6);
   cue(T.kaelte, 'fail', .4); cue(T.schaufelt, 'whoosh', .5); cue(T.motor, 'pump', .5);
   cue(T.tuer, 'whoosh', .5); cue(T.kueche15, 'tick', .5); cue(T.heizt, 'impact', .9);

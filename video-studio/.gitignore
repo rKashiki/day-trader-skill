@@ -1,3 +1,4 @@
 node_modules/
 videos/*/build/
 out/
+.venv-tts/
