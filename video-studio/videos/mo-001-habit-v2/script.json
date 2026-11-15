@@ -1,0 +1,75 @@
+{
+ "account": "Motivation",
+ "title": "Who lasts 365 days? (v2: pick-one hook, short ending)",
+ "format": "Experiment/contest with personified traits + counter + twist",
+ "voice": "am_fenrir",
+ "speed": 1.05,
+ "pause": 0.14,
+ "tail": 1.6,
+ "beats": [
+  {
+   "id": "h1",
+   "text": "Pick one. Only one of them makes it to day 365.",
+   "pause": 0.15
+  },
+  {
+   "id": "h2",
+   "text": "And it's probably not the one you picked.",
+   "pause": 0.25
+  },
+  {
+   "id": "b1",
+   "text": "Day 1. Motivation is the loudest."
+  },
+  {
+   "id": "b2",
+   "text": "Habit has the weakest battery.",
+   "pause": 0.25
+  },
+  {
+   "id": "b3",
+   "text": "Day 12. It's raining. Motivation stays in bed."
+  },
+  {
+   "id": "b4",
+   "text": "Day 39. Talent quits. Not because it's hard. Because it's boring.",
+   "pause": 0.25
+  },
+  {
+   "id": "b5",
+   "text": "Day 66. Something strange happens."
+  },
+  {
+   "id": "b6",
+   "text": "Habit's battery starts charging. All by itself."
+  },
+  {
+   "id": "b7",
+   "text": "Studies suggest it takes about 66 days for effort to turn automatic.",
+   "pause": 0.25
+  },
+  {
+   "id": "b8",
+   "text": "Day 180. Discipline is running on empty."
+  },
+  {
+   "id": "b9",
+   "text": "And right here, Habit takes over.",
+   "pause": 0.3
+  },
+  {
+   "id": "b10",
+   "text": "Day 365.",
+   "pause": 0.4
+  },
+  {
+   "id": "b11",
+   "text": "Motivation starts it. Discipline carries it. Habit finishes it.",
+   "pause": 0.25
+  },
+  {
+   "id": "b12",
+   "text": "Which number did you pick?"
+  }
+ ]
+}
