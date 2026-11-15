@@ -1,0 +1,22 @@
+{
+  "account": "Motivation",
+  "title": "Who gets the yes? (Experiment 002)",
+  "format": "Experiment with personified traits + rejection counter + twist; pick-one hook, short ending (learned from 001 data)",
+  "voice": "am_fenrir",
+  "speed": 1.05,
+  "pause": 0.14,
+  "tail": 1.5,
+  "beats": [
+    {"id": "h1", "text": "Pick one. Each of them sends out 50 job applications. Only one gets a yes.", "pause": 0.15},
+    {"id": "h2", "text": "And it's not the most confident one.", "pause": 0.25},
+    {"id": "b1", "text": "Zero rejections. Fear never even hits send."},
+    {"id": "b2", "text": "3 rejections. Ego takes it personally."},
+    {"id": "b3", "text": "10 rejections. Confidence is out of fuel.", "pause": 0.25},
+    {"id": "b4", "text": "Curiosity started with the weakest battery. But after every no, it asks one question. Why?"},
+    {"id": "b5", "text": "And every answer charges it back up.", "pause": 0.2},
+    {"id": "b6", "text": "49 rejections. Application number 50.", "pause": 0.35},
+    {"id": "b7", "text": "Yes.", "pause": 0.45},
+    {"id": "b8", "text": "Confidence runs out. Curiosity turns every no into data.", "pause": 0.25},
+    {"id": "b9", "text": "Which number did you pick?"}
+  ]
+}
