@@ -7,8 +7,8 @@ Liest   videos/<slug>/script.json
 Schreibt videos/<slug>/build/voice.wav      (24 kHz mono)
          videos/<slug>/build/timeline.json  (Beats + Wörter mit Start/Ende in Sekunden)
 
-Standardstimme für alle englischen Videos: am_fenrir (männlich, US-Englisch, energisch).
-Optionen in script.json: "voice": "am_fenrir,am_onyx" mischt Stimmen, "pitch": -3 senkt um 3 Halbtöne,
+Standardstimme für alle englischen Videos: am_michael (männlich, US-Englisch, ruhig und erwachsen; seit 17.11. statt am_fenrir).
+Optionen in script.json: "voice": "am_michael,am_onyx" mischt Stimmen, "pitch": -3 senkt um 3 Halbtöne,
 "lang": "b" für britische Stimmen (bm_*).
 Jeder Beat wird einzeln synthetisiert und gecacht, damit Szenen exakt auf Satzgrenzen schneiden können.
 """
@@ -31,7 +31,7 @@ except ImportError:
     sys.exit("Kokoro fehlt. Setup siehe README (uv venv .venv-tts + kokoro).")
 
 SR = 24000
-DEFAULT_VOICE = "am_fenrir"
+DEFAULT_VOICE = "am_michael"
 PUNCT = re.compile(r"^[^\w]+$", re.UNICODE)
 _PIPES = {}
 

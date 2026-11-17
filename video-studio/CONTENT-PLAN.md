@@ -1,6 +1,6 @@
 # Content-Plan: Hooks und Formate für beide Accounts
 
-Alle Videos laufen auf **Englisch**, Stimme **Kokoro am_fenrir** (männlich, US-Englisch, energisch).
+Alle Videos laufen auf **Englisch**, Stimme **Kokoro am_michael** (männlich, US-Englisch, ruhig und erwachsen).
 Hooks und On-Screen-Texte sind deshalb auf Englisch, die Erklärungen für dich auf Deutsch.
 **Hook** = erster gesprochener Satz. **Anzeigetafel** = was dauerhaft mitläuft. **Twist** = die Wendung bei 70–85 %.
 

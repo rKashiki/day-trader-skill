@@ -88,7 +88,7 @@ Das ist ein eingebauter Fortschrittsbalken: Wer sieht „Runde 3 von 5" oder „
 | **Figuren** | Stark vereinfacht: Strichmännchen, runde Figuren, Flat-Tiere. Gesichter mit 2 Punkten und einem Strich reichen für Emotion | Strichmännchen mit Gesichtsausdrücken, Batterien, Sprechblasen |
 | **Bildwechsel** | Pro Satz ein neues Bild (Lila, Eltern) **oder** ein festes Bild, das Schritt für Schritt wächst (Teich, Seelenlabor, Vape) | Beide Pilotvideos nutzen das „wachsende Bild": Der Zuschauer sieht etwas entstehen |
 | **Schnitttempo** | Szenenerkennung: Teich 19 harte Schnitte in 72 s, die anderen fast keine harten Schnitte, dafür ständige Animation | Dauerbewegung (Partikel, Kniebeugen, Zähler) statt harter Schnitte |
-| **Stimme** | KI-Stimme, ruhig, schnell (ca. 2,7–3 Wörter/s), kurze Sätze, fast keine Satzpausen | Kokoro (lokal), Stimme am_fenrir: männlich, US-Englisch, energisch; Satzpausen automatisch gekürzt |
+| **Stimme** | KI-Stimme, ruhig, schnell (ca. 2,7–3 Wörter/s), kurze Sätze, fast keine Satzpausen | Kokoro (lokal), Stimme am_michael: männlich, US-Englisch, ruhig und erwachsen; Satzpausen automatisch gekürzt |
 | **Sound** | Musik + Effekte auf Ereignisse (Ticks beim Zähler, Whoosh bei Wechsel) | 11 synthetische SFX, per Zeitstempel an Wörter gekoppelt |
 | **Serie** | „Seelenlabor · Versuch Nr. 006", „Rauchen vs. Vapen"-Titelleiste | „Physik im Alltag #001", „Experiment 001" |
 
@@ -123,7 +123,7 @@ Das ist ein eingebauter Fortschrittsbalken: Wer sieht „Runde 3 von 5" oder „
 
 ## 6. Wie die zwei Pilotvideos diese Regeln umsetzen
 
-**Load & Limit #001 – Fridge (66 s, Stimme Kokoro am_fenrir)**
+**Load & Limit #001 – Fridge (Stimme Kokoro am_michael)**
 - Hook: Paradox "Your fridge makes your kitchen hotter." Im ersten Frame: Kühlschrank, steigendes Thermometer, Hitzewellen, Caption „YOUR".
 - Dauerhafte Frage oben: „FRIDGE = HEATER?" (offene Schleife bis zur letzten Sekunde)
 - Kette nach Teich-Prinzip: 5× But/So, eingeblendet als PROBLEM/FIX-Pille; jedes Bauteil springt groß als Begriff rein (EVAPORATOR, COMPRESSOR…) und bleibt klein als Beschriftung stehen. Am Ende steht ein komplett beschrifteter Kältekreislauf.
@@ -132,7 +132,7 @@ Das ist ein eingebauter Fortschrittsbalken: Wer sieht „Runde 3 von 5" oder „
 - Temperaturen in °F (US-Publikum), in `scene.js` mit `UNIT = 'C'` auf Celsius umschaltbar.
 - Physik geprüft: Kältekreislauf (Verdampfer → Kompressor → Verflüssiger → Kapillarrohr), offene Kühlschranktür erwärmt den Raum netto, weil die Motorarbeit zusätzlich als Wärme abgegeben wird.
 
-**Motivation #001 – Who lasts 365 days? (52 s, Stimme Kokoro am_fenrir)**
+**Motivation #001 – Who lasts 365 days? (Stimme Kokoro am_michael)**
 - Hook: Wettkampf + Wette: "Only one makes it. And it's not the one you're betting on."
 - Dauerhafte Frage oben + Tageszähler mit Fortschrittsbalken, Zeitraffer mit Tick-Sounds
 - Falsche Fährte: Habit hat am Anfang die schwächste (rote) Batterie

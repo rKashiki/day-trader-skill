@@ -2,7 +2,7 @@
   "account": "Load & Limit",
   "title": "Your fridge is heating your kitchen",
   "format": "Problem-solution chain (But... So... That's the...)",
-  "voice": "am_fenrir",
+  "voice": "am_michael",
   "speed": 1.08,
   "pause": 0.12,
   "tail": 1.4,

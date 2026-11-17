@@ -3,7 +3,7 @@
 Kurzvideos auf **Englisch** (1080×1920, 30 fps), komplett aus Code: KI-Stimme, animierte Grafik im Browser,
 Wort-für-Wort-Captions, Sound-Effekte, fertiges MP4. Gebaut, damit du neue Videos einfach mit Claude Code erzeugst.
 
-**Stimme für alle Videos: Kokoro, `am_fenrir`** (männlich, US-Englisch, energisch). Läuft lokal, ohne Account,
+**Stimme für alle Videos: Kokoro, `am_michael`** (männlich, US-Englisch, ruhig und erwachsen, 113 Hz). Läuft lokal, ohne Account,
 Modell unter Apache-2.0-Lizenz.
 
 - `ANALYSE.md` – was die Referenzvideos stark macht (Hooks, Aufbau, Artwork) + Hook-Formeln
@@ -14,7 +14,7 @@ Modell unter Apache-2.0-Lizenz.
 ## So entsteht ein Video
 
 ```
-videos/<slug>/script.json   Text in Beats (Sätze/Absätze), Stimme am_fenrir
+videos/<slug>/script.json   Text in Beats (Sätze/Absätze), Stimme am_michael
         │  python3 engine/tts.py videos/<slug>       (Kokoro, lokal)
         ▼
 build/voice.wav + build/timeline.json   (jedes Wort mit Start/Ende in Sekunden)
@@ -68,7 +68,7 @@ Claude legt `script.json` + `scene.js` an (die beiden Piloten dienen als Vorlage
 
 ```jsonc
 {
-  "voice": "am_fenrir",    // Standard für alle Videos
+  "voice": "am_michael",   // Standard für alle Videos
   "speed": 1.08,           // Sprechtempo (1.0 = normal)
   "pitch": 0,              // Halbtöne, z. B. -3 = tiefer (Formanten bleiben erhalten)
                            // "voice": "am_fenrir,am_onyx" mischt Stimmen; "lang": "b" für britische (bm_*)
@@ -117,10 +117,10 @@ Gemessene Grundtonhöhe (Median) der männlichen Kokoro-Stimmen, Hörprobe: `out
 
 | Stimme | Tonhöhe | Charakter |
 |--------|---------|-----------|
-| `am_fenrir` (Standard) | 138 Hz | energisch, US |
+| `am_fenrir` (bis 17.11. Standard) | 138 Hz | energisch, US |
 | `am_fenrir` + `"pitch": -1.5` | 126 Hz | Fenrir, leicht tiefer |
 | `am_fenrir` + `"pitch": -3` | 115 Hz | Fenrir, deutlich tiefer |
-| `am_michael` | 113 Hz | ruhiger, erwachsen, US |
+| **`am_michael` (Standard)** | 113 Hz | ruhiger, erwachsen, US |
 | `am_fenrir,am_onyx` (Mix) | 106 Hz | Fenrir-Energie, tiefer Klang |
 | `bm_lewis` (`"lang": "b"`) | 90 Hz | tief, britisch |
 | `am_onyx` | 88 Hz | am tiefsten, US |
