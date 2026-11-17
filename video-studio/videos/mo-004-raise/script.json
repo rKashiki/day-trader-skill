@@ -1,0 +1,20 @@
+{
+  "account": "Motivation",
+  "title": "Same raise, different future",
+  "format": "HUD line style (like nolledge): two paths for one number, compound growth chart, closing question",
+  "voice": "am_fenrir",
+  "speed": 1.05,
+  "pause": 0.16,
+  "tail": 1.8,
+  "beats": [
+    {"id": "h1", "text": "Two coworkers get the exact same raise. 300 dollars a month.", "pause": 0.25},
+    {"id": "b1", "text": "The first one upgrades his life. A nicer car. A newer phone."},
+    {"id": "b2", "text": "The second one keeps the same life, and invests the raise.", "pause": 0.25},
+    {"id": "b3", "text": "After one year, the difference is barely visible."},
+    {"id": "b4", "text": "After ten years, he has over 50 thousand."},
+    {"id": "b5", "text": "After thirty years, over 360 thousand.", "pause": 0.3},
+    {"id": "b6", "text": "He only put in 108 thousand. The rest is growth.", "pause": 0.3},
+    {"id": "b7", "text": "Same job. Same raise. Completely different future.", "pause": 0.3},
+    {"id": "b8", "text": "So here's the question. What is your next raise going to buy?"}
+  ]
+}

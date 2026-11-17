@@ -92,6 +92,17 @@ gesprochenen Text, kurze Sätze. Sound-Effekte nie genau auf ein Schlüsselwort 
 | `arrow()`, `txt()`, `tag()`, `bubble()`, `battery()`, `drawFace()` | Grafik-Bausteine |
 | `cue(t, 'whoosh', 0.5)` | Sound-Effekt (whoosh, pop, tick, ding, impact, riser, fail, glitch, heartbeat, sizzle, pump) |
 
+## Stil-Kits
+
+Neben dem Basis-Kit gibt es zwei Look-Kits, die eine Szene zusätzlich in `scene.html` lädt:
+
+| Kit | Look | Beispiel |
+|-----|------|----------|
+| `engine/kit-spotlight.js` | monochrom, leuchtende Figuren, Lichtkegel, Filmkorn, Pill-Labels, große Zähler, weiche Szenen-Überblendungen (`runScenes`) | `videos/mo-003-overnight` |
+| `engine/kit-hud.js` | schwarz, Linien-Icons in Ringen mit rotierender Skala, Münzen auf Punktpfaden, Diagramme | `videos/mo-004-raise` |
+
+Beide Referenz-Stile kommen ohne Wort-Untertitel aus; in den Szenen schaltet `CAPTIONS = true` dezente Untertitel ein.
+
 ## Hinweise
 
 - Temperaturen im Kühlschrank-Video sind in °F; `UNIT = 'C'` in `scene.js` schaltet auf Celsius.
