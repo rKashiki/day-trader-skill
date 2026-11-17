@@ -117,7 +117,7 @@ function person(lane, t) {
   if (pulse !== 1) { ctx.save(); ctx.strokeStyle = C.red; ctx.lineWidth = 5; ctx.globalAlpha = .5 + .5 * Math.sin(t * 12); rr(lane.x - 82, by - 42, 164, 84, 14); ctx.stroke(); ctx.restore(); }
   if (lane.id === 'Q' && between(t, T.charges - .2, be('b6'))) txt('⚡', lane.x + 92, by - 2, { size: 46, color: C.gold, alpha: .6 + .4 * Math.sin(t * 20) });
   if (lane.id === 'F' && between(t, T.fearSend, T.fearSend + 2.2)) txt('UNUSED', lane.x, by - 52, { font: 'JetBrains Mono', weight: 800, size: 24, color: C.dim, alpha: ease(t, T.fearSend, .3) * (1 - prog(t, T.fearSend + 1.9, T.fearSend + 2.2)) });
-  txt(lane.name, lane.x, F + 52, { font: 'JetBrains Mono', weight: 800, size: 27, color: st.gold ? C.gold : mixColor('#d9d9e0', '#55555e', grey), spacing: 1 });
+  txt(lane.name, lane.x, F + 52, { alpha: 1 - clamp((CAM_Z - 1.1) / .25), font: 'JetBrains Mono', weight: 800, size: 27, color: st.gold ? C.gold : mixColor('#d9d9e0', '#55555e', grey), spacing: 1 });
 }
 
 /* ---------- Absage-Karten ---------- */
@@ -160,11 +160,40 @@ function cards(t) {
 }
 
 /* ---------- Bühne ---------- */
-function background(t) {
+function background(t) { // Bildschirm
   const g = ctx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, C.bg1); g.addColorStop(1, C.bg2);
   ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+}
+function stage(t) { // Welt (wird gezoomt)
   for (let i = 1; i < 4; i++) { const x = (LANES[i - 1].x + LANES[i].x) / 2; line(x, 720, x, F + 80, 'rgba(255,255,255,0.06)', 3); }
-  line(40, F + 2, W - 40, F + 2, C.floor, 6);
+  line(-500, F + 2, W + 500, F + 2, C.floor, 6);
+}
+/* ---------- Kamera: Zoom auf die Figur, über die gerade gesprochen wird ---------- */
+const LX = id => LANES.find(l => l.id === id).x;
+const FY = 960;
+let CAM_Z = 1;
+const SHOTS = [
+  { t0: bs('b1') + .3, t1: be('b1') + .2, x: LX('F'), y: FY, z: 1.55 },
+  { t0: bs('b2') + .4, t1: be('b2') + .2, x: LX('E'), y: FY, z: 1.55 },
+  { t0: bs('b3') + .4, t1: be('b3') + .3, x: LX('C'), y: FY, z: 1.55 },
+  { t0: bs('b4'), t1: be('b5') + .1, x: LX('Q'), y: FY, z: 1.55 },
+  { t0: wt('b6', 'Application'), t1: T.yes - .15, x: LX('Q'), y: FY, z: 1.45 },
+];
+function camera(t) {
+  const cam = camShots(t, SHOTS, { y: 960 });
+  cam.z *= lerp(1.07, 1, ease(t, 0, 1.1, E.outCubic));
+  CAM_Z = cam.z;
+  applyCam(cam, [540, lerp(960, 1060, clamp((cam.z - 1) / .55))]);
+}
+/** Die Arbeit sichtbar machen: vor jeder Absage fliegt eine Bewerbung raus. */
+function sends(t) {
+  for (const lane of LANES) for (let i = 1; i <= 49; i++) {
+    if (!receives(lane.id, i)) continue;
+    const t0 = HIT[i] - .5, k = prog(t, t0, t0 + .42);
+    if (k <= 0 || k >= 1) continue;
+    const e = E.inCubic(k);
+    envelope(lerp(lane.x + 66, lane.x + 300, e), lerp(F - 160, 520, e) - Math.sin(k * Math.PI) * 60, -.4 * e, '#ffffff', 1 - e * .3);
+  }
 }
 function header(t) {
   txt(SERIES, W / 2, 250, { font: 'JetBrains Mono', weight: 700, size: 28, color: C.dim, spacing: 2 });
@@ -242,7 +271,7 @@ function hookPick(t) {
   txt('PICK ONE', W / 2, 630, { font: 'JetBrains Mono', weight: 800, size: 46, color: C.gold, alpha: out, spacing: 4 });
 }
 function midCta(t) {
-  const a0 = bs('b5') + .1, a1 = a0 + 1.8;
+  const a0 = bs('b6') + .05, a1 = a0 + 1.7;
   if (t < a0 || t > a1) return;
   const k = ease(t, a0, .3, E.outBack) * (1 - prog(t, a1 - .3, a1));
   ctx.save(); ctx.translate(W / 2, 645); ctx.scale(k, k);
@@ -253,13 +282,12 @@ function midCta(t) {
 
 /* ---------- Frame ---------- */
 function draw(ctx, t) {
-  const z = lerp(1.07, 1, ease(t, 0, 1.1, E.outCubic));
   const [sx, sy] = between(t, T.yes, T.yes + .3) ? shake(t, 12, 60) : [0, 0];
-  ctx.save(); ctx.translate(540 + sx, 960 + sy); ctx.scale(z, z); ctx.translate(-540, -960);
   background(t);
-  header(t);
-  counter(t);
+  ctx.save(); ctx.translate(sx, sy); camera(t);
+  stage(t);
   for (const lane of LANES) person(lane, t);
+  sends(t);
   cards(t);
   crown(LANES[3].x, 772, ease(t, T.yes + 1.3, .5, E.outBack) * (1 - ease(t, T.frage, .25)));
   const B = 795;
@@ -267,13 +295,13 @@ function draw(ctx, t) {
   bubble('Their loss.', LANES[1].x, B, t, T.ego, T.egoQuit + .8, { size: 38 });
   bubble('Maybe I’m not good enough…', LANES[0].x, B, t, T.conf, T.confQuit + 1.1, { size: 38 });
   bubble('Why?', LANES[3].x, B, t, T.why - .1, be('b5') - .3, { size: 44, bg: C.gold });
-  midCta(t);
   laneHighlight(t);
   hookPick(t);
   yesStamp(t);
   ctx.restore();
+  header(t); counter(t); midCta(t);
   captions(t, {
-    y: 1440, size: 128,
+    y: 1530, size: 128,
     accentWords: ['Pick', 'yes', 'Curiosity', 'question', 'Why', 'charges', 'data', 'number', '50'],
     accent: C.gold,
     accents: [{ words: ['Fear', 'Ego', 'Confidence', 'rejections', 'fuel', 'personally', 'weakest', 'Zero'], color: '#ff6b6b' }],
@@ -289,7 +317,7 @@ function cues() {
   for (let i = 1; i <= 49; i++) cue(HIT[i] + FLY - .02, i <= 10 ? 'pop' : 'tick', i <= 10 ? .35 : .3);
   cue(T.fearSend + .35, 'fail', .4); cue(T.egoQuit + .15, 'fail', .45); cue(T.confQuit + .35, 'fail', .45);
   cue(T.why + .35, 'pop', .5); cue(T.charges - .3, 'riser', .35);
-  cue(bs('b5') + .1, 'pop', .35);
+  cue(bs('b6') + .05, 'pop', .3);
   cue(T.yes, 'impact', .9); cue(T.yes + .1, 'ding', .6);
   cue(T.hiC, 'pop', .4); cue(T.hiQ, 'pop', .45);
   for (let i = 0; i < 4; i++) cue(T.frage + i * .12, 'pop', .4);

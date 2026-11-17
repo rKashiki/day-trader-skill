@@ -1,28 +1,84 @@
 {
-  "account": "Load & Limit",
-  "title": "Your fridge is heating your kitchen",
-  "format": "Problem-solution chain (But... So... That's the...)",
-  "voice": "am_michael",
-  "speed": 1.08,
-  "pause": 0.12,
-  "tail": 1.4,
-  "beats": [
-    {"id": "h1", "text": "Your fridge makes your kitchen hotter.", "pause": 0.25},
-    {"id": "h2", "text": "Sounds wrong? Then build one yourself.", "pause": 0.15},
-    {"id": "b1", "text": "You want to keep food cold. So you put it in a box."},
-    {"id": "b2", "text": "But heat always flows from hot to cold. Right through the walls."},
-    {"id": "b3", "text": "So you insulate the walls. That slows the heat down. But it doesn't stop it."},
-    {"id": "b5", "text": "What really cools things down is evaporation. That's why you shiver when you step out of a pool."},
-    {"id": "b6", "text": "So you run a pipe through the box. Inside it, a liquid that boils far below freezing."},
-    {"id": "b7", "text": "It sucks the heat right out of your food. That's the evaporator."},
-    {"id": "b8", "text": "But now the pipe is full of warm gas."},
-    {"id": "b9", "text": "So a pump squeezes that gas together. Squeezed gas gets hot. Hotter than your kitchen. That's the compressor."},
-    {"id": "b10", "text": "A grid on the back dumps that heat into your kitchen. The gas turns back into a liquid. That's the condenser."},
-    {"id": "b11", "text": "Then a super thin tube drops the pressure. The liquid turns ice cold."},
-    {"id": "b12", "text": "And the whole loop starts over.", "pause": 0.25},
-    {"id": "b13", "text": "Congrats. You just built a fridge.", "pause": 0.3},
-    {"id": "b14", "text": "But it doesn't make cold. It just shovels heat from the inside to the back. Plus the heat from the motor."},
-    {"id": "b15", "text": "So leaving the fridge door open won't cool your kitchen.", "pause": 0.3},
-    {"id": "b16", "text": "It heats it."}
-  ]
+ "account": "Load & Limit",
+ "title": "Your fridge is heating your kitchen",
+ "format": "Problem-solution chain (But... So... That's the...)",
+ "voice": "am_michael",
+ "speed": 1.0,
+ "pause": 0.12,
+ "tail": 1.4,
+ "beats": [
+  {
+   "id": "h1",
+   "text": "Your fridge makes your kitchen hotter.",
+   "pause": 0.25
+  },
+  {
+   "id": "h2",
+   "text": "Sounds wrong? Then build one yourself.",
+   "pause": 0.15
+  },
+  {
+   "id": "b1",
+   "text": "You want to keep food cold. So you put it in a box."
+  },
+  {
+   "id": "b2",
+   "text": "But heat always flows from hot to cold. Right through the walls."
+  },
+  {
+   "id": "b3",
+   "text": "So you insulate the walls. That slows the heat down. But it doesn't stop it."
+  },
+  {
+   "id": "b5",
+   "text": "What really cools things down is evaporation. That's why you shiver when you step out of a pool."
+  },
+  {
+   "id": "b6",
+   "text": "So you run a pipe through the box. Inside it, a liquid that boils far below freezing."
+  },
+  {
+   "id": "b7",
+   "text": "It sucks the heat right out of your food. That's the evaporator."
+  },
+  {
+   "id": "b8",
+   "text": "But now the pipe is full of warm gas."
+  },
+  {
+   "id": "b9",
+   "text": "So a pump squeezes that gas together. Squeezed gas gets hot. Hotter than your kitchen. That's the compressor."
+  },
+  {
+   "id": "b10",
+   "text": "A grid on the back dumps that heat into your kitchen. The gas turns back into a liquid. That's the condenser."
+  },
+  {
+   "id": "b11",
+   "text": "Then a super thin tube drops the pressure. The liquid turns ice cold."
+  },
+  {
+   "id": "b12",
+   "text": "And the whole loop starts over.",
+   "pause": 0.25
+  },
+  {
+   "id": "b13",
+   "text": "Congrats. You just built a fridge.",
+   "pause": 0.3
+  },
+  {
+   "id": "b14",
+   "text": "But it doesn't make cold. It just shovels heat from the inside to the back. Plus the heat from the motor."
+  },
+  {
+   "id": "b15",
+   "text": "So leaving the fridge door open won't cool your kitchen.",
+   "pause": 0.3
+  },
+  {
+   "id": "b16",
+   "text": "It heats it."
+  }
+ ]
 }

@@ -247,6 +247,24 @@ function captions(t, o = {}) {
   ctx.restore();
 }
 
+/* ---------- Kamera-Fahrten (Zoom auf einzelne Figuren) ---------- */
+/** shots = [{ t0, t1, x, y, z }]: zwischen t0 und t1 wird der Weltpunkt (x, y) mit Zoom z an `at` gezeigt.
+ *  Übergänge sind weich; aufeinanderfolgende Shots fahren direkt von Figur zu Figur. */
+function camShots(t, shots, o = {}) {
+  let c = { x: o.x ?? W / 2, y: o.y ?? H / 2, z: 1 };
+  const tin = o.in ?? .6, tout = o.out ?? .6;
+  for (const s of shots) {
+    const w = E.inOutCubic(prog(t, s.t0 - tin * .4, s.t0 + tin * .6)) * (1 - E.inOutCubic(prog(t, s.t1 - tout * .4, s.t1 + tout * .6)));
+    if (w <= 0) continue;
+    c = { x: lerp(c.x, s.x, w), y: lerp(c.y, s.y, w), z: lerp(c.z, s.z, w) };
+  }
+  // leichte Handkamera-Bewegung, nur wenn reingezoomt
+  const hand = clamp((c.z - 1) * 2);
+  c.x += Math.sin(t * .9) * 6 * hand; c.y += Math.cos(t * .7) * 5 * hand;
+  return c;
+}
+function applyCam(c, at = [W / 2, H / 2]) { ctx.translate(at[0], at[1]); ctx.scale(c.z, c.z); ctx.translate(-c.x, -c.y); }
+
 /* ---------- Satz-Untertitel (Stück für Stück, gesprochenes Wort hell) ---------- */
 let _CHUNKS = null;
 function phraseChunks(maxWords = 4, gapBreak = .07) { // Kokoro: Satzzeichen erzeugen kleine Lücken -> dort umbrechen

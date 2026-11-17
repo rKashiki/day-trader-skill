@@ -120,7 +120,7 @@ function lifter(lane, t) {
   // Ladeblitz, wenn sich Gewohnheit "von allein" auflädt
   if (lane.id === 'G' && between(t, T.laedt, T.laedt + 1.6)) txt('⚡', lane.x + 92, by - 2, { size: 46, color: C.gold, alpha: .6 + .4 * Math.sin(t * 20) });
   // Name
-  txt(lane.name, lane.x, F + 52, { font: 'JetBrains Mono', weight: 800, size: 27, color: st.gold ? C.gold : mixColor('#d9d9e0', '#55555e', quit), spacing: 1 });
+  txt(lane.name, lane.x, F + 52, { alpha: 1 - clamp((CAM_Z - 1.1) / .25), font: 'JetBrains Mono', weight: 800, size: 27, color: st.gold ? C.gold : mixColor('#d9d9e0', '#55555e', quit), spacing: 1 });
   return j;
 }
 function crown(x, y, k) {
@@ -132,12 +132,32 @@ function crown(x, y, k) {
 }
 
 /* ---------- Bühne ---------- */
-function background(t) {
+function background(t) { // Bildschirm-Koordinaten
   const g = ctx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, C.bg1); g.addColorStop(1, C.bg2);
   ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-  // Bahnen
+}
+function stage(t) { // Welt-Koordinaten (wird von der Kamera gezoomt)
   for (let i = 1; i < 4; i++) { const x = (LANES[i - 1].x + LANES[i].x) / 2; line(x, 720, x, F + 80, 'rgba(255,255,255,0.06)', 3); }
-  line(40, F + 2, W - 40, F + 2, C.floor, 6);
+  line(-500, F + 2, W + 500, F + 2, C.floor, 6);
+}
+/* ---------- Kamera: Zoom auf die Figur, über die gerade gesprochen wird ---------- */
+const LX = id => LANES.find(l => l.id === id).x;
+const FY = 960;
+let CAM_Z = 1;
+const SHOTS = [
+  { t0: bs('b1') + .3, t1: be('b1') + .2, x: LX('M'), y: FY, z: 1.55 },
+  { t0: bs('b2'), t1: be('b2') + .1, x: LX('G'), y: FY, z: 1.55 },
+  { t0: bs('b3') + .5, t1: be('b3') + .3, x: LX('M'), y: FY, z: 1.55 },
+  { t0: bs('b4') + .5, t1: be('b4') + .1, x: LX('T'), y: FY, z: 1.55 },
+  { t0: bs('b5') + .5, t1: be('b6') + .2, x: LX('G'), y: FY, z: 1.6 },
+  { t0: bs('b8') + .5, t1: be('b8') + .1, x: LX('D'), y: FY, z: 1.6 },
+  { t0: bs('b9'), t1: be('b9') + .2, x: (LX('D') + LX('G')) / 2, y: FY, z: 1.35 },
+];
+function camera(t) {
+  const cam = camShots(t, SHOTS, { y: 960 });
+  if (typeof hookPick === 'function') cam.z *= lerp(1.07, 1, ease(t, 0, 1.1, E.outCubic));
+  CAM_Z = cam.z;
+  applyCam(cam, [540, lerp(960, 1060, clamp((cam.z - 1) / .55))]); // reingezoomt: Ziel tiefer, Zähler oben bleibt frei
 }
 function header(t) {
   txt(SERIES, W / 2, 250, { font: 'JetBrains Mono', weight: 700, size: 28, color: C.dim, spacing: 2 });
@@ -224,12 +244,9 @@ function midCta(t) {
 
 /* ---------- Frame ---------- */
 function draw(ctx, t) {
-  // Zoom-in in der ersten Sekunde: Bewegung ab Frame 1
-  const z = lerp(1.07, 1, ease(t, 0, 1.1, E.outCubic));
-  ctx.save(); ctx.translate(540, 960); ctx.scale(z, z); ctx.translate(-540, -960);
   background(t);
-  header(t);
-  counter(t);
+  ctx.save(); camera(t);
+  stage(t);
   const J = {};
   for (const lane of LANES) J[lane.id] = lifter(lane, t);
   crown(LANES[3].x, 772, ease(t, T.d365 + .1, .5, E.outBack) * (1 - ease(t, T.frage, .25)));
@@ -240,13 +257,12 @@ function draw(ctx, t) {
   bubble('Too easy.', LANES[1].x, B, t, T.talent, T.schwer, { size: 38 });
   bubble('Boring.', LANES[1].x, B, t, T.langw - .1, be('b4') + .3, { size: 38 });
   bubble('I have to. I have to.', LANES[2].x, B, t, T.dEnd - .2, T.uebern, { size: 38 });
-  rain(t);
-  midCta(t);
   laneHighlight(t);
   hookPick(t);
   ctx.restore();
+  rain(t); header(t); counter(t); midCta(t);
   captions(t, {
-    y: 1440, size: 128,
+    y: 1530, size: 128,
     accentWords: ['Habit', '66', 'automatic', '365', 'finish', 'strange', 'itself', 'charging', 'Pick', 'picked', 'number'],
     accent: C.gold,
     accents: [{ words: ['Motivation', 'Talent', 'Discipline', 'weakest', 'empty', 'bed', 'boring', 'quits'], color: '#ff6b6b' }],

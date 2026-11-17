@@ -80,6 +80,12 @@ Claude legt `script.json` + `scene.js` an (die beiden Piloten dienen als Vorlage
 }
 ```
 
+**Stimme klingt wie in der Hörprobe:** `tts.py` lässt den ganzen Text am Stück sprechen (natürlicher Sprachfluss)
+und schneidet ihn danach anhand der Wort-Zeitstempel in die Beats (`"continuous": false` schaltet auf Einzelsätze).
+Schnitte bekommen 8-ms-Blenden, Effekte werden unter der Stimme automatisch leiser (`"sfx_duck": 0.65`), und die
+Lautheit wird nur linear angehoben (keine Kompression). Tempo 1.0 = Klang wie in der Hörprobe; höheres Tempo macht
+die Stimme auch etwas höher.
+
 Schreibtipps für Kokoro: Zahlen als Ziffern ("Day 66" → Caption zeigt „66"), keine Dezimalzahlen im
 gesprochenen Text, kurze Sätze. Sound-Effekte nie genau auf ein Schlüsselwort legen, sonst wird es überdeckt.
 
@@ -92,6 +98,7 @@ gesprochenen Text, kurze Sätze. Sound-Effekte nie genau auf ein Schlüsselwort 
 | `captions(t, {accentWords, accents, display})` | Wort-für-Wort-Untertitel mit Akzentfarben |
 | `path()`, `strokePath()`, `pointAt()` | Linien, die sich zeichnen; Partikel entlang von Rohren |
 | `arrow()`, `txt()`, `tag()`, `bubble()`, `battery()`, `drawFace()` | Grafik-Bausteine |
+| `camShots(t, shots)` + `applyCam(cam, at)` | Kamera-Fahrten: Zoom auf die Figur, über die gerade gesprochen wird (`shots = [{t0, t1, x, y, z}]`) |
 | `cue(t, 'whoosh', 0.5)` | Sound-Effekt (whoosh, pop, tick, ding, impact, riser, fail, glitch, heartbeat, sizzle, pump) |
 
 ## Stil-Kits

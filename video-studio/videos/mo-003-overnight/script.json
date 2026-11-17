@@ -1,23 +1,67 @@
 {
-  "account": "Motivation",
-  "title": "The overnight success that took 7 years",
-  "format": "Spotlight style (like cryothum): result-first hook, rewind, 'Imagine someone', principle, maxim, title card",
-  "voice": "am_michael",
-  "speed": 1.0,
-  "pause": 0.2,
-  "tail": 2.2,
-  "beats": [
-    {"id": "h1", "text": "Nobody becomes successful overnight. They just stop being invisible overnight.", "pause": 0.5},
-    {"id": "b1", "text": "Imagine someone playing his first open mic. Three people in the room. Two of them are on their phones.", "pause": 0.3},
-    {"id": "b2", "text": "He comes back the next week. And the week after that."},
-    {"id": "b3", "text": "For two years, nobody remembers his name.", "pause": 0.3},
-    {"id": "b4", "text": "His friends get promotions, new apartments, weekends off."},
-    {"id": "b5", "text": "And at every family dinner, someone asks when he'll get a real job.", "pause": 0.3},
-    {"id": "b6", "text": "By year five, he has played more than 250 shows for almost nobody.", "pause": 0.35},
-    {"id": "b7", "text": "Then, in year seven, one clip from one ordinary night gets posted online."},
-    {"id": "b8", "text": "By the next morning, millions of people know his name.", "pause": 0.25},
-    {"id": "b9", "text": "And every headline calls it luck.", "pause": 0.35},
-    {"id": "b10", "text": "But luck can only find you on stage if you never left it.", "pause": 0.4},
-    {"id": "b11", "text": "The world didn't discover him overnight. It just finally caught up."}
-  ]
+ "account": "Motivation",
+ "title": "The overnight success that took 7 years",
+ "format": "Spotlight style (like cryothum): result-first hook, rewind, 'Imagine someone', principle, maxim, title card",
+ "voice": "am_michael",
+ "speed": 1.0,
+ "pause": 0.2,
+ "tail": 2.2,
+ "beats": [
+  {
+   "id": "h1",
+   "text": "Nobody becomes successful overnight. They just stop being invisible overnight.",
+   "pause": 0.5
+  },
+  {
+   "id": "b1",
+   "text": "Imagine someone playing his first open mic. Three people in the room. Two of them are on their phones.",
+   "pause": 0.3
+  },
+  {
+   "id": "b2",
+   "text": "He comes back the next week. And the week after that."
+  },
+  {
+   "id": "b3",
+   "text": "For two years, nobody remembers his name.",
+   "pause": 0.3
+  },
+  {
+   "id": "b4",
+   "text": "His friends get promotions, new apartments, weekends off."
+  },
+  {
+   "id": "b5",
+   "text": "And at every family dinner, someone asks when he'll get a real job.",
+   "pause": 0.3
+  },
+  {
+   "id": "b6",
+   "text": "By year five, he has played more than 250 shows for almost nobody.",
+   "pause": 0.35
+  },
+  {
+   "id": "b7",
+   "text": "Then, in year seven, one clip from one ordinary night gets posted online."
+  },
+  {
+   "id": "b8",
+   "text": "By the next morning, millions of people know his name.",
+   "pause": 0.25
+  },
+  {
+   "id": "b9",
+   "text": "And every headline calls it luck.",
+   "pause": 0.35
+  },
+  {
+   "id": "b10",
+   "text": "But luck can only find you on stage if you never left it.",
+   "pause": 0.4
+  },
+  {
+   "id": "b11",
+   "text": "The world didn't discover him overnight. It just finally caught up."
+  }
+ ]
 }

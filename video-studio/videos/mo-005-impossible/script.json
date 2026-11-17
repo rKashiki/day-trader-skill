@@ -1,19 +1,50 @@
 {
-  "account": "Motivation",
-  "title": "Impossible. Lucky. How?",
-  "format": "Glowing stick-figure parable with narration (like psychoologie), phrase captions with active-word highlight",
-  "voice": "am_michael",
-  "speed": 1.0,
-  "pause": 0.2,
-  "tail": 2.2,
-  "beats": [
-    {"id": "h1", "text": "First, they tell you it's impossible.", "pause": 0.3},
-    {"id": "b1", "text": "Friends laugh. Family worries. People who never tried anything tell you to be realistic.", "pause": 0.3},
-    {"id": "b2", "text": "Then you fall. And they say: told you so.", "pause": 0.35},
-    {"id": "b3", "text": "Nobody sees how many nights you get back up. Alone.", "pause": 0.35},
-    {"id": "b4", "text": "Then, one day, you make it. And suddenly, they call it luck.", "pause": 0.3},
-    {"id": "b5", "text": "A little later, the same people ask you how you did it.", "pause": 0.4},
-    {"id": "b6", "text": "Impossible. Lucky. How.", "pause": 0.4},
-    {"id": "b7", "text": "Three words. Same people. The only thing that changed was you."}
-  ]
+ "account": "Motivation",
+ "title": "Impossible. Lucky. How?",
+ "format": "Glowing stick-figure parable with narration (like psychoologie), phrase captions with active-word highlight",
+ "voice": "am_michael",
+ "speed": 1.0,
+ "pause": 0.2,
+ "tail": 2.2,
+ "beats": [
+  {
+   "id": "h1",
+   "text": "First, they tell you it's impossible.",
+   "pause": 0.3
+  },
+  {
+   "id": "b1",
+   "text": "Friends laugh. Family worries. People who never tried anything tell you to be realistic.",
+   "pause": 0.3
+  },
+  {
+   "id": "b2",
+   "text": "Then you fall. And they say: told you so.",
+   "pause": 0.35
+  },
+  {
+   "id": "b3",
+   "text": "Nobody sees how many nights you get back up. Alone.",
+   "pause": 0.35
+  },
+  {
+   "id": "b4",
+   "text": "Then, one day, you make it. And suddenly, they call it luck.",
+   "pause": 0.3
+  },
+  {
+   "id": "b5",
+   "text": "A little later, the same people ask you how you did it.",
+   "pause": 0.4
+  },
+  {
+   "id": "b6",
+   "text": "Impossible. Lucky. How.",
+   "pause": 0.4
+  },
+  {
+   "id": "b7",
+   "text": "Three words. Same people. The only thing that changed was you."
+  }
+ ]
 }

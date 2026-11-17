@@ -139,6 +139,7 @@ def mix(video_dir):
     script = json.load(open(os.path.join(video_dir, "script.json"), encoding="utf-8"))
     voice = read_audio(os.path.join(build, "voice.wav"))
     out = voice.copy() * float(script.get("voice_gain", 1.0))
+    sfx = np.zeros_like(out)
     cues_path = os.path.join(build, "cues.json")
     cues = json.load(open(cues_path)) if os.path.exists(cues_path) else []
     cache = {}
@@ -155,7 +156,12 @@ def mix(video_dir):
         if i >= len(out):
             continue
         j = min(len(out), i + len(clip))
-        out[i:j] += clip[: j - i]
+        sfx[i:j] += clip[: j - i]
+    # Effekte leiser, solange gesprochen wird, damit die Stimme klingt wie sie ist
+    env = np.convolve(np.abs(voice), np.ones(int(.05 * SR)) / int(.05 * SR), mode="same")
+    talk = np.clip(env / (np.percentile(env[env > 1e-4], 60) if (env > 1e-4).any() else 1), 0, 1)
+    talk = np.convolve(talk, np.ones(int(.12 * SR)) / int(.12 * SR), mode="same")
+    out += sfx * (1 - float(script.get("sfx_duck", 0.65)) * talk)
 
     music = script.get("music")
     if music:

@@ -33,8 +33,22 @@ function camera(t) {
   let cam = Math.max(300, wy(focus)), z = 1, anchor = 1150;
   const r = ease(t, M('reveal'), 1.4, E.inOutCubic);
   cam = lerp(cam, wy(GOLD / 2 + 1), r); z = lerp(1, .5, r); anchor = lerp(1150, 1010, r);
-  return { cam, z, anchor };
+  // Zoom auf die Figur, die gerade aufgibt bzw. das Gold findet
+  let x = 540;
+  for (const [id, t0, t1] of ZOOMS) {
+    const w = E.inOutCubic(prog(t, t0 - .3, t0 + .4)) * (1 - E.inOutCubic(prog(t, t1 - .3, t1 + .4)));
+    if (w <= 0) continue;
+    const l = LANES.find(q => q.id === id);
+    x = lerp(x, l.x, w); cam = lerp(cam, wy(depth(id, t)) - 110, w); z = lerp(z, z * 1.7, w); anchor = lerp(anchor, 1120, w);
+  }
+  return { cam, z, anchor, x };
 }
+const ZOOMS = [
+  ['M', M('motQuit') - 1.5, M('motQuit') + .9],
+  ['T', M('talRock') - .4, M('talQuit') + .7],
+  ['E', M('egoStop') - .3, M('egoQuit') + .6],
+  ['C', M('gold') - .9, M('reveal') - .1],
+];
 
 /* ---------- Erde ---------- */
 function ground(t, reveal) {
@@ -128,8 +142,8 @@ function numbers(t, t0, out = 1, y = -110) {
 function draw(ctx, t) {
   const g = ctx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#15171c'); g.addColorStop(1, '#0c0d10');
   ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-  const { cam, z, anchor } = camera(t), reveal = ease(t, M('reveal') + .4, .8);
-  ctx.save(); ctx.translate(540, anchor); ctx.scale(z, z); ctx.translate(-540, -cam);
+  const { cam, z, anchor, x } = camera(t), reveal = ease(t, M('reveal') + .4, .8);
+  ctx.save(); ctx.translate(540, anchor); ctx.scale(z, z); ctx.translate(-x, -cam);
   ground(t, reveal);
   LANES.forEach(l => shaft(l, t, reveal));
   goldBurst(860, t);

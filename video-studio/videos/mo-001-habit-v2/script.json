@@ -3,7 +3,7 @@
  "title": "Who lasts 365 days? (v2: pick-one hook, short ending)",
  "format": "Experiment/contest with personified traits + counter + twist",
  "voice": "am_michael",
- "speed": 1.05,
+ "speed": 1.0,
  "pause": 0.14,
  "tail": 1.6,
  "beats": [

@@ -65,6 +65,16 @@ def synth(text, voice, speed, lang):
     return np.concatenate(audio) if audio else np.zeros(1, np.float32), words
 
 
+def fade(a, ms=8):
+    n = min(len(a) // 2, int(SR * ms / 1000))
+    if n <= 1:
+        return a
+    a = a.copy()
+    a[:n] *= np.linspace(0, 1, n, dtype=np.float32)
+    a[-n:] *= np.linspace(1, 0, n, dtype=np.float32)
+    return a
+
+
 def pitch_shift(audio, semitones):
     """Tonhöhe verschieben, Dauer und Formanten bleiben erhalten (ffmpeg + rubberband)."""
     import subprocess
@@ -91,6 +101,41 @@ def wordless(video_dir, script, build):
     print(f"wortlos: {duration:.1f}s, {len(beats)} Marker")
 
 
+def _norm(s):
+    return re.sub(r"[^a-z0-9]", "", s.lower())
+
+
+def split_continuous(beats, audio, words):
+    """Ordnet die Wörter des am Stück gesprochenen Textes den Beats zu und schneidet das Audio passend.
+    Gibt [(audio_beat, words_relativ), ...] zurück oder None, wenn die Zuordnung nicht aufgeht."""
+    toks = [w for w in words if _norm(w["w"])]
+    pos, ranges = 0, []
+    for b in beats:
+        expected = [_norm(x) for x in re.findall(r"[\w'’]+", b["text"]) if _norm(x)]
+        idx = []
+        for e in expected:
+            j = next((k for k in range(pos, min(pos + 3, len(toks))) if _norm(toks[k]["w"]) == e), None)
+            if j is None:
+                return None
+            idx.append(j)
+            pos = j + 1
+        if not idx:
+            return None
+        ranges.append((idx[0], idx[-1]))
+    out = []
+    for i, (a, z) in enumerate(ranges):
+        s = toks[a]["start"] - .05
+        if i:
+            s = max(s, toks[ranges[i - 1][1]]["end"] + .01)
+        e = toks[z]["end"] + .12
+        if i + 1 < len(ranges):
+            e = min(e, toks[ranges[i + 1][0]]["start"] - .02)
+        seg = audio[int(max(0, s) * SR):int(e * SR)]
+        ws = [{"w": w["w"], "start": w["start"] - max(0, s), "end": w["end"] - max(0, s)} for w in toks[a:z + 1]]
+        out.append((seg, ws))
+    return out
+
+
 def main(video_dir):
     script = json.load(open(os.path.join(video_dir, "script.json"), encoding="utf-8"))
     build = os.path.join(video_dir, "build")
@@ -107,21 +152,33 @@ def main(video_dir):
     tail = float(script.get("tail", 1.2))
     default_pause = float(script.get("pause", 0.12))
 
+    def cached(text, v, sp):
+        key = hashlib.sha1(f"kokoro|{text}|{v}|{sp}|{lang}".encode()).hexdigest()[:16]
+        wav_p, json_p = os.path.join(cache, key + ".npy"), os.path.join(cache, key + ".json")
+        if os.path.exists(wav_p) and os.path.exists(json_p):
+            return np.load(wav_p), json.load(open(json_p, encoding="utf-8"))
+        a, ws = synth(text, v, sp, lang)
+        np.save(wav_p, a)
+        json.dump(ws, open(json_p, "w", encoding="utf-8"), ensure_ascii=False)
+        return a, ws
+
+    # Standard: ganzen Text AM STÜCK sprechen lassen (natürlicher Sprachfluss wie in einer Hörprobe)
+    # und danach anhand der Wort-Zeitstempel in die Beats schneiden. Fällt auf Einzelsätze zurück,
+    # wenn Beats eigene Stimmen/Tempi haben oder die Zuordnung nicht aufgeht.
+    segments = None
+    overrides = any("voice" in b or "speed" in b for b in script["beats"])
+    if script.get("continuous", True) and not overrides:
+        segments = split_continuous(script["beats"], *cached(" ".join(b["text"] for b in script["beats"]), voice, speed))
+        if segments is None:
+            print("Hinweis: Wort-Zuordnung nicht eindeutig, nutze Einzelsätze")
+    if segments is None:
+        segments = [cached(b["text"], b.get("voice", voice), float(b.get("speed", speed))) for b in script["beats"]]
+
     pieces = [np.zeros(int(lead_in * SR), np.float32)]
     t = lead_in
     beats_out = []
-    for beat in script["beats"]:
+    for beat, (audio, words) in zip(script["beats"], segments):
         text = beat["text"]
-        b_voice = beat.get("voice", voice)
-        b_speed = float(beat.get("speed", speed))
-        key = hashlib.sha1(f"kokoro|{text}|{b_voice}|{b_speed}|{lang}".encode()).hexdigest()[:16]
-        wav_p, json_p = os.path.join(cache, key + ".npy"), os.path.join(cache, key + ".json")
-        if os.path.exists(wav_p) and os.path.exists(json_p):
-            audio, words = np.load(wav_p), json.load(open(json_p, encoding="utf-8"))
-        else:
-            audio, words = synth(text, b_voice, b_speed, lang)
-            np.save(wav_p, audio)
-            json.dump(words, open(json_p, "w", encoding="utf-8"), ensure_ascii=False)
         if pitch:
             audio = pitch_shift(audio, pitch)
 
@@ -140,13 +197,13 @@ def main(video_dir):
             keep.append(audio[int(pos * SR):int(c0 * SR)])
             pos = c1
         keep.append(audio[int(pos * SR):])
-        audio = np.concatenate(keep)
+        audio = np.concatenate([fade(k) for k in keep])  # 8-ms-Blenden: keine Klicks an Schnitten
         words = [{**w, "start": remap(w["start"]), "end": remap(w["end"])} for w in words]
 
         # Stille vorne/hinten abschneiden.
         head = max(0.0, (words[0]["start"] if words else 0) - 0.04)
         last = (words[-1]["end"] if words else len(audio) / SR) + 0.10
-        audio = audio[int(head * SR):min(len(audio), int(last * SR))]
+        audio = fade(audio[int(head * SR):min(len(audio), int(last * SR))])
         dur = len(audio) / SR
 
         beats_out.append({

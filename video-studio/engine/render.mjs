@@ -97,9 +97,16 @@ try {
     fs.writeFileSync(list, parts.filter(Boolean).map(p => `file '${p}'`).join('\n'));
     fs.mkdirSync(path.join(ROOT, 'out'), { recursive: true });
     const final = path.join(ROOT, 'out', `${slug}.mp4`);
+    // Lautheit messen, dann rein linear auf -14 LUFS anheben (verändert den Stimmklang nicht)
+    let ln = 'loudnorm=I=-14:TP=-1.5:LRA=11';
+    try {
+      const err = execFileSync('sh', ['-c', `ffmpeg -nostdin -hide_banner -i '${path.join(build, 'audio.wav')}' -af loudnorm=I=-14:TP=-1.5:LRA=11:print_format=json -f null - 2>&1 | sed -n '/^{/,/^}/p'`]).toString();
+      const m = JSON.parse(err);
+      ln += `:measured_I=${m.input_i}:measured_TP=${m.input_tp}:measured_LRA=${m.input_lra}:measured_thresh=${m.input_thresh}:offset=${m.target_offset}:linear=true`;
+    } catch (e) { console.warn('Lautheitsmessung fehlgeschlagen, nutze einfache Normalisierung'); }
     execFileSync('ffmpeg', ['-nostdin', '-v', 'error', '-y', '-f', 'concat', '-safe', '0', '-i', list,
       '-ss', String(f0 / FPS), '-i', path.join(build, 'audio.wav'), '-map', '0:v', '-map', '1:a', '-c:v', 'copy',
-      '-af', 'loudnorm=I=-14:TP=-1.5:LRA=11', '-ar', '48000', '-c:a', 'aac', '-b:a', '192k', '-shortest', '-movflags', '+faststart', final]);
+      '-af', ln, '-ar', '48000', '-c:a', 'aac', '-b:a', '192k', '-shortest', '-movflags', '+faststart', final]);
     console.log('Fertig:', final);
   }
 } finally {
