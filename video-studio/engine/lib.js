@@ -247,6 +247,49 @@ function captions(t, o = {}) {
   ctx.restore();
 }
 
+/* ---------- Satz-Untertitel (Stück für Stück, gesprochenes Wort hell) ---------- */
+let _CHUNKS = null;
+function phraseChunks(maxWords = 4, gapBreak = .07) { // Kokoro: Satzzeichen erzeugen kleine Lücken -> dort umbrechen
+  if (_CHUNKS) return _CHUNKS;
+  _CHUNKS = [];
+  let cur = [];
+  ALL_WORDS.forEach((w, i) => {
+    const prev = ALL_WORDS[i - 1];
+    const brk = cur.length && (cur.length >= maxWords || w.beat !== prev.beat || w.start - prev.end > gapBreak);
+    if (brk) { _CHUNKS.push(cur); cur = []; }
+    cur.push(w);
+  });
+  if (cur.length) _CHUNKS.push(cur);
+  return _CHUNKS;
+}
+function phraseCaptions(t, o = {}) {
+  const c = { y: 1450, size: 56, color: '#ffffff', dimColor: 'rgba(200,205,215,0.38)', maxWords: 4, hold: .35, ...o };
+  const chunks = phraseChunks(c.maxWords);
+  let ch = null;
+  for (let i = 0; i < chunks.length; i++) {
+    const a = chunks[i][0].start - .06, nx = chunks[i + 1];
+    const b = Math.min(nx ? nx[0].start - .06 : 1e9, chunks[i][chunks[i].length - 1].end + c.hold);
+    if (t >= a && t < b) { ch = chunks[i]; break; }
+  }
+  if (!ch && chunks.length && t < chunks[0][0].start) ch = chunks[0]; // 1. Frame nie ohne Text
+  if (!ch) return;
+  ctx.save(); ctx.font = `800 ${c.size}px Inter`; ctx.textBaseline = 'middle';
+  const words = ch.map(w => (c.upper ? w.w.toUpperCase() : w.w));
+  const sp = ctx.measureText(' ').width, widths = words.map(s => ctx.measureText(s).width);
+  const total = widths.reduce((a, b) => a + b, 0) + sp * (words.length - 1);
+  let x = W / 2 - total / 2;
+  const k = t < ch[0].start - .06 ? 1 : E.outCubic(prog(t, ch[0].start - .06, ch[0].start + .15));
+  ctx.globalAlpha *= k; ctx.translate(0, (1 - k) * 12);
+  words.forEach((s, i) => {
+    const on = t >= ch[i].start - .02;
+    const acc = (c.accentWords || []).some(a => norm(ch[i].w).startsWith(norm(a)));
+    ctx.fillStyle = on ? (acc ? (c.accent || c.color) : c.color) : c.dimColor;
+    if (on && c.glow !== false) { ctx.shadowColor = acc ? (c.accent || 'rgba(255,255,255,.5)') : 'rgba(255,255,255,.35)'; ctx.shadowBlur = 18; } else ctx.shadowBlur = 0;
+    ctx.textAlign = 'left'; ctx.fillText(s, x, c.y); x += widths[i] + sp;
+  });
+  ctx.restore();
+}
+
 /* ---------- Render-Hook ---------- */
 window.seek = (t) => { ctx.save(); ctx.clearRect(0, 0, W, H); draw(ctx, t); ctx.restore(); };
 window.frameData = (t, q = .9) => { window.seek(t); return canvas.toDataURL('image/jpeg', q); };

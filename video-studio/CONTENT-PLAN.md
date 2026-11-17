@@ -46,6 +46,9 @@ Regel Nr. 1 für diesen Account: **Gefühl vor Information.** Wenn ein Fakt gena
 | 008 | "These two are waiting for motivation. One of them just starts for two minutes." | Experiment mit Zähler | Tage + „Minutes trained" | Die 2-Minuten-Figur trainiert am Ende im Schnitt länger als die, die auf den perfekten Tag wartet |
 | 009 ✅ | "Nobody becomes successful overnight. They just stop being invisible overnight." | Spotlight-Stil (`mo-003-overnight`): Ergebnis zuerst, Rückspulen, Musiker 7 Jahre | VIEWS 31,400,000 → AUDIENCE 3 → SHOWS 364 | "Luck can only find you on stage if you never left it." Titelkarte STAY ON STAGE |
 | 010 ✅ | "Two coworkers get the exact same raise. 300 dollars a month." | HUD-Stil (`mo-004-raise`) | Investiert: $3,718 → $51,925 → $365,991 | Nur $108,000 eingezahlt, der Rest ist Wachstum (7 % p. a., monatlich). Frage: "What is your next raise going to buy?" |
+| 011 ✅ | "First, they tell you it's impossible." | Glow-Parabel mit Stimme (`mo-005-impossible`) | IMPOSSIBLE → LUCKY → HOW? | "The only thing that changed was you." |
+| 012 ✅ | (wortlos) "WHO REACHES THE GOLD?" + PICK ONE | Experiment 003 (`mo-006-dig`): vier Schächte, Kamera folgt in die Tiefe | Tiefe in Metern | Röntgenblick: Gold lag unter allen, Ego hörte 1 m davor auf. "MOST PEOPLE QUIT 1 METER BEFORE THE GOLD." |
+| 013 ✅ | (wortlos) Uhr 11:00 PM, zwei Betten | Zwei-Figuren-Vergleich (`mo-007-night`), Spiegelboden | Uhrzeit im Zeitraffer | Scrollen bis 2 Uhr → Snooze ×3 → Panik vs. Checkliste. "THE MORNING IS DECIDED THE NIGHT BEFORE." |
 
 **Serien-Idee:** "Experiment 00X" als feste Reihe (Consistency, Rejection, Temptation, Distraction). Gleicher Kopf, gleiche Bühne, wechselnde Eigenschaften. Am Ende immer "Which one are you?" mit Nummern zum Kommentieren.
 

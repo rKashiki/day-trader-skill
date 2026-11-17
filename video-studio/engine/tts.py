@@ -8,6 +8,8 @@ Schreibt videos/<slug>/build/voice.wav      (24 kHz mono)
          videos/<slug>/build/timeline.json  (Beats + Wörter mit Start/Ende in Sekunden)
 
 Standardstimme für alle englischen Videos: am_fenrir (männlich, US-Englisch, energisch).
+Optionen in script.json: "voice": "am_fenrir,am_onyx" mischt Stimmen, "pitch": -3 senkt um 3 Halbtöne,
+"lang": "b" für britische Stimmen (bm_*).
 Jeder Beat wird einzeln synthetisiert und gecacht, damit Szenen exakt auf Satzgrenzen schneiden können.
 """
 import hashlib
@@ -63,15 +65,44 @@ def synth(text, voice, speed, lang):
     return np.concatenate(audio) if audio else np.zeros(1, np.float32), words
 
 
+def pitch_shift(audio, semitones):
+    """Tonhöhe verschieben, Dauer und Formanten bleiben erhalten (ffmpeg + rubberband)."""
+    import subprocess
+    f = 2 ** (semitones / 12)
+    out = subprocess.run(
+        ["ffmpeg", "-nostdin", "-v", "error", "-f", "f32le", "-ar", str(SR), "-ac", "1", "-i", "-",
+         "-af", f"rubberband=pitch={f}:formant=preserved", "-f", "f32le", "-ar", str(SR), "-ac", "1", "-"],
+        input=audio.astype(np.float32).tobytes(), capture_output=True, check=True).stdout
+    shifted = np.frombuffer(out, dtype=np.float32)
+    return shifted[:len(audio)] if len(shifted) >= len(audio) else np.pad(shifted, (0, len(audio) - len(shifted)))
+
+
+def wordless(video_dir, script, build):
+    """Video ohne Sprecher: stille Tonspur + Zeitmarken aus script.json ("markers": {"name": sekunden})."""
+    os.makedirs(build, exist_ok=True)
+    duration = float(script["duration"])
+    with wave.open(os.path.join(build, "voice.wav"), "wb") as w:
+        w.setnchannels(1)
+        w.setsampwidth(2)
+        w.setframerate(SR)
+        w.writeframes(np.zeros(int(duration * SR), np.int16).tobytes())
+    beats = [{"id": k, "text": "", "start": v, "end": v, "words": []} for k, v in sorted(script.get("markers", {}).items(), key=lambda kv: kv[1])]
+    json.dump({"duration": duration, "voice": None, "beats": beats}, open(os.path.join(build, "timeline.json"), "w"), indent=1)
+    print(f"wortlos: {duration:.1f}s, {len(beats)} Marker")
+
+
 def main(video_dir):
     script = json.load(open(os.path.join(video_dir, "script.json"), encoding="utf-8"))
     build = os.path.join(video_dir, "build")
+    if script.get("wordless"):
+        return wordless(video_dir, script, build)
     cache = os.path.join(build, "tts-cache")
     os.makedirs(cache, exist_ok=True)
 
     voice = script.get("voice", DEFAULT_VOICE)
     speed = float(script.get("speed", 1.0))
-    lang = script.get("lang", "a")  # a = amerikanisches Englisch
+    lang = script.get("lang", "a")  # a = amerikanisches Englisch, b = britisch
+    pitch = float(script.get("pitch", 0))  # Halbtöne, z. B. -3 = tiefer
     lead_in = float(script.get("lead_in", 0.15))
     tail = float(script.get("tail", 1.2))
     default_pause = float(script.get("pause", 0.12))
@@ -91,6 +122,8 @@ def main(video_dir):
             audio, words = synth(text, b_voice, b_speed, lang)
             np.save(wav_p, audio)
             json.dump(words, open(json_p, "w", encoding="utf-8"), ensure_ascii=False)
+        if pitch:
+            audio = pitch_shift(audio, pitch)
 
         # Lange Pausen innerhalb eines Beats kürzen (Shorts brauchen Tempo).
         max_gap = float(beat.get("max_gap", script.get("max_gap", 0.30)))
@@ -137,7 +170,7 @@ def main(video_dir):
 
     timeline = {"duration": round(duration, 3), "voice": voice, "beats": beats_out}
     json.dump(timeline, open(os.path.join(build, "timeline.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
-    print(f"voice.wav {duration:.2f}s ({voice}, speed {speed}), {len(beats_out)} beats, {sum(len(b['words']) for b in beats_out)} words")
+    print(f"voice.wav {duration:.2f}s ({voice}, speed {speed}, pitch {pitch:+g}), {len(beats_out)} beats, {sum(len(b['words']) for b in beats_out)} words")
     for b in beats_out:
         print(f"  {b['start']:6.2f}-{b['end']:6.2f}  {b['id']:<5} {b['text'][:72]}")
 

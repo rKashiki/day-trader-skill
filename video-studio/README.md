@@ -70,6 +70,8 @@ Claude legt `script.json` + `scene.js` an (die beiden Piloten dienen als Vorlage
 {
   "voice": "am_fenrir",    // Standard für alle Videos
   "speed": 1.08,           // Sprechtempo (1.0 = normal)
+  "pitch": 0,              // Halbtöne, z. B. -3 = tiefer (Formanten bleiben erhalten)
+                           // "voice": "am_fenrir,am_onyx" mischt Stimmen; "lang": "b" für britische (bm_*)
   "max_gap": 0.30,         // längste Pause innerhalb eines Beats
   "pause": 0.12,           // Pause zwischen Beats
   "sfx_gain": 0.7,         // Lautstärke aller Effekte
@@ -100,8 +102,28 @@ Neben dem Basis-Kit gibt es zwei Look-Kits, die eine Szene zusätzlich in `scene
 |-----|------|----------|
 | `engine/kit-spotlight.js` | monochrom, leuchtende Figuren, Lichtkegel, Filmkorn, Pill-Labels, große Zähler, weiche Szenen-Überblendungen (`runScenes`) | `videos/mo-003-overnight` |
 | `engine/kit-hud.js` | schwarz, Linien-Icons in Ringen mit rotierender Skala, Münzen auf Punktpfaden, Diagramme | `videos/mo-004-raise` |
+| `engine/kit-glow.js` | leuchtende Strichfiguren mit Posen (stehen, gehen, klettern, fallen, knien, sitzen, graben, jubeln), Nachtberge, Sonnenaufgang, Spott-Chips | `videos/mo-005-impossible`, `mo-006-dig`, `mo-007-night` |
+
+`phraseCaptions(t, {...})` in `lib.js` zeigt Satzstücke, bei denen das gesprochene Wort hell wird (wie in Erzähl-Parabeln).
+
+**Wortlose Videos** (nur Musik + Text-Pointe): in `script.json` `"wordless": true`, `"duration": 21.5` und benannte
+`"markers"` setzen; `tts.py` legt dann eine stille Tonspur an, die Szene nutzt `bs('marker')` als Zeitpunkte.
 
 Beide Referenz-Stile kommen ohne Wort-Untertitel aus; in den Szenen schaltet `CAPTIONS = true` dezente Untertitel ein.
+
+## Tiefere Stimme
+
+Gemessene Grundtonhöhe (Median) der männlichen Kokoro-Stimmen, Hörprobe: `out/stimmen-tief-vergleich.mp4` (nicht im Git):
+
+| Stimme | Tonhöhe | Charakter |
+|--------|---------|-----------|
+| `am_fenrir` (Standard) | 138 Hz | energisch, US |
+| `am_fenrir` + `"pitch": -1.5` | 126 Hz | Fenrir, leicht tiefer |
+| `am_fenrir` + `"pitch": -3` | 115 Hz | Fenrir, deutlich tiefer |
+| `am_michael` | 113 Hz | ruhiger, erwachsen, US |
+| `am_fenrir,am_onyx` (Mix) | 106 Hz | Fenrir-Energie, tiefer Klang |
+| `bm_lewis` (`"lang": "b"`) | 90 Hz | tief, britisch |
+| `am_onyx` | 88 Hz | am tiefsten, US |
 
 ## Hinweise
 

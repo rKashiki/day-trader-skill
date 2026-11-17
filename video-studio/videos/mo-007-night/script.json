@@ -1,0 +1,8 @@
+{
+  "account": "Motivation",
+  "title": "The morning is decided the night before",
+  "format": "Wordless two-figure comparison (like moneyinmono): night room, clock time-lapse, mirrored floor, English text punchline. Add music in the app.",
+  "wordless": true,
+  "duration": 21.5,
+  "markers": {"start": 0, "late": 2.6, "twoAm": 6.6, "sixAm": 9.6, "snoozeEnd": 13.4, "panic": 15.2, "text1": 17.4, "text2": 18.6}
+}
