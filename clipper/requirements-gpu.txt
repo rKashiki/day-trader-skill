@@ -1,0 +1,3 @@
+# Nur mit Nvidia-Grafikkarte: CUDA-Bibliotheken für die schnelle Transkription (faster-whisper)
+nvidia-cublas-cu12>=12.4,<13
+nvidia-cudnn-cu12>=9.1,<10

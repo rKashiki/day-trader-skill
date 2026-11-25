@@ -1,0 +1,48 @@
+# Clipper-Einstellungen
+# Alles hinter einem # ist ein Kommentar. Nach einer Änderung einfach speichern
+# und den Clipper neu starten. Die meisten Werte kannst du auch beim Start
+# überschreiben, z. B.:  python clip.py LINK --clips 8 --max 45
+
+[clips]
+count = 5              # Wie viele Clips sollen entstehen?
+min_seconds = 20       # Mindestlänge eines Clips in Sekunden
+max_seconds = 60       # Höchstlänge eines Clips in Sekunden
+layout = "auto"        # "auto": Sprecher verfolgen, ohne Gesicht ganzes Bild mit unscharfem Hintergrund
+                       # "crop": immer auf 9:16 zuschneiden
+                       # "fit":  immer das ganze Bild zeigen (unscharfer Hintergrund oben/unten)
+focus = ""             # Optionaler Wunsch an die KI, z. B. "lustige Momente" oder "Spartipps"
+
+[ai]
+model = "claude-opus-5-5"  # Günstiger: "claude-sonnet-5-5" oder "claude-haiku-5-5"
+effort = "high"            # Wie gründlich die KI nachdenkt: low, medium, high, xhigh, max
+output_language = ""       # Sprache für Titel und Beschreibungen. Leer = Sprache des Videos
+
+[transcription]
+model = "large-v3-turbo"   # Whisper-Modell. Genauer, aber langsamer: "large-v3"
+language = ""              # Leer = automatisch erkennen, sonst z. B. "de" oder "en"
+device = "auto"            # "auto", "cuda" (Nvidia-Grafikkarte) oder "cpu"
+
+[captions]
+enabled = true
+font = "Montserrat Black"  # Mitgeliefert. Eigene Schrift: .ttf-Datei in assets/fonts legen, Namen hier eintragen
+size = 92                  # Schriftgröße (bei 1080x1920)
+color = "#FFFFFF"          # Textfarbe
+highlight_color = "#FFE11A" # Farbe des gerade gesprochenen Wortes
+outline_color = "#000000"  # Randfarbe
+outline = 7                # Randdicke
+shadow = 3                 # Schattengröße
+max_words = 3              # Höchstens so viele Wörter gleichzeitig
+max_chars = 18             # Höchstens so viele Zeichen pro Einblendung
+position = 0.70            # Höhe: 0 = ganz oben, 1 = ganz unten
+uppercase = true           # Alles in Großbuchstaben
+remove_punctuation = true  # Kommas und Punkte weglassen (? und ! bleiben)
+
+[video]
+width = 1080
+height = 1920
+encoder = "auto"           # "auto" (Nvidia NVENC wenn möglich, sonst CPU), "nvenc" oder "x264"
+quality = 20               # Kleiner = bessere Qualität und größere Datei (18 bis 24 ist sinnvoll)
+
+[download]
+max_height = 1080          # Höchste Auflösung beim YouTube-Download
+cookies_from_browser = ""  # Nur nötig, wenn YouTube "Sign in to confirm you're not a bot" meldet: "firefox"

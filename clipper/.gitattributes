@@ -1,0 +1,2 @@
+# Windows-Startdateien mit CRLF-Zeilenenden speichern, damit cmd.exe sie sicher liest
+*.bat -text

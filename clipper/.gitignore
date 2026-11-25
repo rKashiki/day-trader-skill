@@ -1,0 +1,7 @@
+# Eigene Daten bleiben lokal
+.env
+.venv/
+arbeitsordner/
+clips/
+__pycache__/
+*.pyc

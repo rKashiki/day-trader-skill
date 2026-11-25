@@ -1,0 +1,7 @@
+# Clipper: Python-Pakete (Installation: setup_windows.bat oder pip install -r requirements.txt)
+anthropic>=2.14
+yt-dlp[default]>=2026.11.23
+faster-whisper>=1.2.1
+opencv-python>=4.10
+numpy>=1.26
+python-dotenv>=1.0
